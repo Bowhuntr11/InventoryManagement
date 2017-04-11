@@ -6,6 +6,7 @@
 package inventorymanagement;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -40,20 +41,26 @@ public class InventoryManagement extends Application {
         bp.setLeft(partsBorderPane());
         bp.setRight(productsBorderPane());
 
-        Button btnBotton = new Button("EXIT");
-        BorderPane.setAlignment(btnBotton, Pos.CENTER_RIGHT);
-        bp.setBottom(btnBotton);
+        Button exitBtn = new Button("EXIT");
+        BorderPane.setAlignment(exitBtn, Pos.CENTER_RIGHT);
+        bp.setBottom(exitBtn);
+        exitBtn.setOnAction((ActionEvent e) -> {
+            primaryStage.close();
+        });
 
         Scene scene = new Scene(bp, 1200, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
+    /*
+    // BELOW IS FOR LEFT PANEL (PARTS)
+    */ 
+    
     // Left pane for Parts
     public BorderPane partsBorderPane() {
         BorderPane partsBP = new BorderPane();
         partsBP.setPadding(new Insets(50, 10, 100, 50));
-        // partsBP.setStyle("-fx-border-color: black");
         partsBP.setMaxWidth(500);
 
         partsBP.setTop(leftTopBox());
@@ -91,11 +98,13 @@ public class InventoryManagement extends Application {
         TableView leftTable = new TableView();
         TableColumn partID = new TableColumn("Part ID");
         TableColumn partName = new TableColumn("Part Name");
-        TableColumn invLevel = new TableColumn("Inventory Level");
-        invLevel.setMinWidth(100);
-        TableColumn price = new TableColumn("Price/Cost per Unit");   
-        price.setMinWidth(130);
-        leftTable.getColumns().addAll(partID, partName, invLevel, price);
+        TableColumn invLevelParts = new TableColumn("Inventory Level");
+        // Setting Column width to minimum so that user doesn't have to resize it
+        invLevelParts.setMinWidth(100);
+        TableColumn pricePart = new TableColumn("Price/Cost per Unit");   
+        // Setting Column width to minimum so that user doesn't have to resize it
+        pricePart.setMinWidth(130);
+        leftTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
         final VBox partsBox = new VBox();
         partsBox.setMaxHeight(200);
         partsBox.getChildren().addAll(leftTable);
@@ -108,33 +117,111 @@ public class InventoryManagement extends Application {
         leftBottom.setPadding(new Insets(15, 12, 15, 12));
         leftBottom.setSpacing(10);
 
-        // Add Parts Button
-        Button addBtn = new Button("Add");
-
-        // Modify Parts Button
-        Button modifyBtn = new Button("Modify");
+        // Add Parts Button for Parts
+        Button addBtnParts = new Button("Add");
+        addBtnParts.setOnAction((ActionEvent e) -> {
+            PartScenes addPart = new PartScenes();
+            addPart.addPart();
+        });
         
-        // Delete Parts Button
-        Button deleteBtn = new Button("Delete");
+        // Modify Parts Button for Parts
+        Button modifyBtnParts = new Button("Modify");
+        modifyBtnParts.setOnAction((ActionEvent e) -> {
+            PartScenes addPart = new PartScenes();
+            addPart.modifyPart();
+        });
+        
+        // Delete Parts Button for Parts
+        Button deleteBtnParts = new Button("Delete");
+        deleteBtnParts.setOnAction((ActionEvent e) -> {
+            PartScenes addPart = new PartScenes();
+            addPart.deletePart();
+        });
 
-        leftBottom.getChildren().addAll(addBtn, modifyBtn, deleteBtn);
+        leftBottom.getChildren().addAll(addBtnParts, modifyBtnParts, deleteBtnParts);
         leftBottom.setAlignment(Pos.CENTER_RIGHT);
 
         return leftBottom;
     }
     
+    
+    /*
+    // BELOW IS FOR RIGHT PANEL (PRODUCTS)
+    */
         public BorderPane productsBorderPane() {
         BorderPane products = new BorderPane();
+        
+        // Arranging window
         products.setPadding(new Insets(50, 50, 100, 10));
         products.setMaxWidth(500);
 
-        products.setTop(leftTopBox());
-        products.setCenter(partsBox());
-        products.setBottom(leftBottomBox());
+        products.setTop(rightTopBox());
+        products.setCenter(productsBox());
+        products.setBottom(rightBottomBox());
 
         return products;
     }
     
+        public HBox rightTopBox() {
+        HBox rightTop = new HBox();
+        rightTop.setPadding(new Insets(15, 12, 15, 12));
+        rightTop.setSpacing(10);
+
+        // Parts Label
+        Label rightLabel = new Label("Products");
+        rightLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        rightLabel.setPadding(new Insets(0, 125, 0, 0));
+
+        // Parts Search Button
+        Button searchProducts = new Button("Search");
+        
+        // Parts Search Field
+        TextField searchField = new TextField();
+        searchField.setMaxWidth(200);
+
+        rightTop.getChildren().addAll(rightLabel, searchProducts, searchField);
+
+        return rightTop;
+    }    
+    
+    // Table for Products listing
+    public VBox productsBox() {
+        TableView rightTable = new TableView();
+        TableColumn productID = new TableColumn("Product ID");
+        TableColumn productName = new TableColumn("Product Name");
+        // Setting Column width to minimum so that user doesn't have to resize it
+        productName.setMinWidth(100);
+        TableColumn invLevelProducts = new TableColumn("Inventory Level");
+        invLevelProducts.setMinWidth(100);
+        TableColumn priceProduct = new TableColumn("Price per Unit");   
+        priceProduct.setMinWidth(130);
+        rightTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+        final VBox productsBox = new VBox();
+        productsBox.setMaxHeight(200);
+        productsBox.getChildren().addAll(rightTable);
+
+        return productsBox;
+    }
+        
+    public HBox rightBottomBox() {
+        HBox rightBottom = new HBox();
+        rightBottom.setPadding(new Insets(15, 12, 15, 12));
+        rightBottom.setSpacing(10);
+
+        // Add Parts Button for Products
+        Button addBtnProduct = new Button("Add");
+
+        // Modify Parts Button for Products
+        Button modifyBtnProduct = new Button("Modify");
+        
+        // Delete Parts Button for Products
+        Button deleteBtnProduct = new Button("Delete");
+
+        rightBottom.getChildren().addAll(addBtnProduct, modifyBtnProduct, deleteBtnProduct);
+        rightBottom.setAlignment(Pos.CENTER_RIGHT);
+
+        return rightBottom;
+    }
     /**
      * @param args the command line arguments
      */

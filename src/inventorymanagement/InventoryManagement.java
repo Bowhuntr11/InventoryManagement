@@ -41,6 +41,7 @@ public class InventoryManagement extends Application {
         bp.setLeft(partsBorderPane());
         bp.setRight(productsBorderPane());
 
+        // Exit Button
         Button exitBtn = new Button("EXIT");
         BorderPane.setAlignment(exitBtn, Pos.CENTER_RIGHT);
         bp.setBottom(exitBtn);
@@ -99,14 +100,12 @@ public class InventoryManagement extends Application {
         TableColumn partID = new TableColumn("Part ID");
         TableColumn partName = new TableColumn("Part Name");
         TableColumn invLevelParts = new TableColumn("Inventory Level");
-        // Setting Column width to minimum so that user doesn't have to resize it
-        invLevelParts.setMinWidth(100);
+        invLevelParts.setMinWidth(100); // Setting Column width to minimum so that user doesn't have to resize it
         TableColumn pricePart = new TableColumn("Price/Cost per Unit");   
-        // Setting Column width to minimum so that user doesn't have to resize it
-        pricePart.setMinWidth(130);
+        pricePart.setMinWidth(130); // Setting Column width to minimum so that user doesn't have to resize it
         leftTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
         final VBox partsBox = new VBox();
-        partsBox.setMaxHeight(200);
+        partsBox.setMaxHeight(200); // Setting MaxHeight for the table so it doesn't run off the screen
         partsBox.getChildren().addAll(leftTable);
 
         return partsBox;
@@ -120,22 +119,22 @@ public class InventoryManagement extends Application {
         // Add Parts Button for Parts
         Button addBtnParts = new Button("Add");
         addBtnParts.setOnAction((ActionEvent e) -> {
-            PartScenes addPart = new PartScenes();
-            addPart.addPart();
+            PartScenes partScene = new PartScenes();
+            partScene.addPart();
         });
         
         // Modify Parts Button for Parts
         Button modifyBtnParts = new Button("Modify");
         modifyBtnParts.setOnAction((ActionEvent e) -> {
-            PartScenes addPart = new PartScenes();
-            addPart.modifyPart();
+            PartScenes partScene = new PartScenes();
+            partScene.modifyPart();
         });
         
         // Delete Parts Button for Parts
         Button deleteBtnParts = new Button("Delete");
         deleteBtnParts.setOnAction((ActionEvent e) -> {
-            PartScenes addPart = new PartScenes();
-            addPart.deletePart();
+            PartScenes partScene = new PartScenes();
+            partScene.deletePart();
         });
 
         leftBottom.getChildren().addAll(addBtnParts, modifyBtnParts, deleteBtnParts);

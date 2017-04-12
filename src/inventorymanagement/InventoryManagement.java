@@ -119,22 +119,22 @@ public class InventoryManagement extends Application {
         // Add Parts Button for Parts
         Button addBtnParts = new Button("Add");
         addBtnParts.setOnAction((ActionEvent e) -> {
-            PartScenes partScene = new PartScenes();
-            partScene.addPart();
+            AddPartScreen addPartScene = new AddPartScreen();
+            addPartScene.addPart();
         });
         
         // Modify Parts Button for Parts
         Button modifyBtnParts = new Button("Modify");
         modifyBtnParts.setOnAction((ActionEvent e) -> {
-            PartScenes partScene = new PartScenes();
-            partScene.modifyPart();
+            ModifyPartScreen modPartScene = new ModifyPartScreen();
+            modPartScene.modifyPart();
         });
         
         // Delete Parts Button for Parts
         Button deleteBtnParts = new Button("Delete");
         deleteBtnParts.setOnAction((ActionEvent e) -> {
-            PartScenes partScene = new PartScenes();
-            partScene.deletePart();
+            DeletePartScreen delPartScene = new DeletePartScreen();
+            delPartScene.deletePart();
         });
 
         leftBottom.getChildren().addAll(addBtnParts, modifyBtnParts, deleteBtnParts);

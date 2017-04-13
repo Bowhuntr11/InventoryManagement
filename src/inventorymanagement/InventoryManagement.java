@@ -133,8 +133,7 @@ public class InventoryManagement extends Application {
         // Delete Parts Button for Parts
         Button deleteBtnParts = new Button("Delete");
         deleteBtnParts.setOnAction((ActionEvent e) -> {
-            DeletePartScreen delPartScene = new DeletePartScreen();
-            delPartScene.deletePart();
+            //NEED TO FIX
         });
 
         leftBottom.getChildren().addAll(addBtnParts, modifyBtnParts, deleteBtnParts);
@@ -209,7 +208,11 @@ public class InventoryManagement extends Application {
 
         // Add Parts Button for Products
         Button addBtnProduct = new Button("Add");
-
+        addBtnProduct.setOnAction((ActionEvent e) -> {
+            AddProductScreen addProductScene = new AddProductScreen();
+            addProductScene.addProduct();
+        });
+        
         // Modify Parts Button for Products
         Button modifyBtnProduct = new Button("Modify");
         

@@ -5,8 +5,6 @@
  */
 package inventorymanagement;
 
-import java.time.Clock;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -21,7 +19,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -36,21 +33,21 @@ public class AddPartScreen {
     public static final Font ITALICS = Font.font("Arial", FontPosture.ITALIC,
             Font.getDefault().getSize());
     
-    public Label compLabel = new Label("Comp Nm");
-    public Label idLabel = new Label("ID");
-    public Label nameLabel = new Label("Name");
-    public Label invLabel = new Label("Inv");
-    public Label priceLabel = new Label("Price/Cost");
-    public Label maxLabel = new Label("Max");
+    final private Label compMachLabel = new Label("Comp Nm");
+    final private Label idLabel = new Label("ID");
+    final private Label nameLabel = new Label("Name");
+    final private Label invLabel = new Label("Inv");
+    final private Label priceLabel = new Label("Price/Cost");
+    final private Label maxLabel = new Label("Max");
     
-    public TextField idBox = new TextField("Auto Gen - Disabled");
-    public TextField nameBox = new TextField("Part Name");
-    public TextField invBox = new TextField("Inv");
-    public TextField priceBox = new TextField("Price/Cost");
-    public TextField maxBox = new TextField("Max");
-    public TextField minBox = new TextField("Min");
-    public Label minLabel = new Label("Min");
-    public TextField companyBox = new TextField("Comp Nm");
+    final private TextField idBox = new TextField("Auto Gen - Disabled");
+    final private TextField nameBox = new TextField("Part Name");
+    final private TextField invBox = new TextField("Inv");
+    final private TextField priceBox = new TextField("Price/Cost");
+    final private TextField maxBox = new TextField("Max");
+    final private TextField minBox = new TextField("Min");
+    final private Label minLabel = new Label("Min");
+    final private TextField compMachBox = new TextField("Comp Nm");
     
     
     public void addPart() {
@@ -127,7 +124,7 @@ public class AddPartScreen {
             left.setPadding(new Insets(15, 5, 5, 75));
             
             left.getChildren().addAll(idLabel, nameLabel, invLabel, priceLabel,
-                    maxLabel, compLabel);
+                    maxLabel, compMachLabel);
             
             return left;
         }
@@ -155,24 +152,24 @@ public class AddPartScreen {
             maxBox.setFont(ITALICS);
             maxBox.setMaxWidth(50);
             
-            minLabel.setPadding(new Insets(5, 15, 0, 15));
+            minLabel.setPadding(new Insets(0, 15, 0, 15));
             
             minBox.setFont(ITALICS);
             minBox.setMaxWidth(50);
             maxMin.getChildren().addAll(maxBox, minLabel, minBox);
             
-            companyBox.setFont(ITALICS);
-            companyBox.setMaxWidth(100);
+            compMachBox.setFont(ITALICS);
+            compMachBox.setMaxWidth(100);
 
             right.getChildren().addAll(idBox, nameBox, invBox, priceBox, 
-                    maxMin, companyBox);
+                    maxMin, compMachBox);
             
             return right;
         }
         
         public void changeLabel(String label, String field) {
-            compLabel.setText(label);
-            companyBox.setText(field);
+            compMachLabel.setText(label);
+            compMachBox.setText(field);
         }
 }
     

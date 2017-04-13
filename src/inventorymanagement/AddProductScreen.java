@@ -5,17 +5,13 @@
  */
 package inventorymanagement;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,31 +24,30 @@ import javafx.stage.Stage;
  *
  * @author Sherrill
  */
-public class ModifyPartScreen {
-    
+public class AddProductScreen {
     public static final Font ITALICS = Font.font("Arial", FontPosture.ITALIC,
             Font.getDefault().getSize());
     
-    final private Label compLabel = new Label("Comp Nm");
     final private Label idLabel = new Label("ID");
     final private Label nameLabel = new Label("Name");
     final private Label invLabel = new Label("Inv");
-    final private Label priceLabel = new Label("Price/Cost");
+    final private Label priceLabel = new Label("Price");
     final private Label maxLabel = new Label("Max");
+    
+    final private TextField idBox = new TextField("Auto Gen - Disabled");
+    final private TextField nameBox = new TextField("Product Name");
+    final private TextField invBox = new TextField("Inv");
+    final private TextField priceBox = new TextField("Price");
+    final private TextField maxBox = new TextField("Max");
+    final private TextField minBox = new TextField("Min");
     final private Label minLabel = new Label("Min");
     
-    public TextField idBox = new TextField("**NEEDS ID**");
-    public TextField nameBox = new TextField();
-    public TextField invBox = new TextField();
-    public TextField priceBox = new TextField();
-    public TextField maxBox = new TextField();
-    public TextField minBox = new TextField();
-    public TextField companyBox = new TextField();
     
-    
-    public void modifyPart() {
+    public void addProduct() {
         Stage stage = new Stage();
-        BorderPane bp = new BorderPane();
+        BorderPane mainPane = new BorderPane();
+        BorderPane leftPane = new BorderPane();
+        BorderPane rightPane = new BorderPane();
 
         // Buttons on Bottom
         HBox btns = new HBox();
@@ -72,68 +67,54 @@ public class ModifyPartScreen {
         
         btns.getChildren().addAll(saveBtn, cancelBtn);
         
-        bp.setTop(modifyPartTop());
-        bp.setLeft(modifyPartLeft());
-        bp.setRight(modifyPartRight());
-        bp.setBottom(btns);
+        // Organizing overall layout
+        mainPane.setLeft(leftPane);
+        mainPane.setRight(rightPane);
         
-        Scene scene = new Scene(bp, 400, 400);
+        // Organizing left side of layout
+        leftPane.setTop(addProductTop());
+        leftPane.setLeft(addProductLabels());
+        leftPane.setRight(addProductTextBoxes());
+        
+        // Organizing right side of layout
+        rightPane.setCenter(rightLayout());
+        
+        Scene scene = new Scene(mainPane, 1200, 600);
         stage.setScene(scene);
         stage.show();
     }
     
-        // Top Items on Add Part Screen
-        public HBox modifyPartTop() {
-            ToggleGroup radio = new ToggleGroup();
+        // Top Items on Add Product Screen
+        public HBox addProductTop() {
             HBox top = new HBox();
             top.setSpacing(20);
-            top.setPadding(new Insets(15, 12, 15, 12));
-            Label label = new Label("Modify Part");
+            top.setPadding(new Insets(100, 12, 15, 100));
+            Label label = new Label("Add Product");
             label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
             label.setPadding(new Insets(0, 50, 0, 0));
             
-            // In-House Radio Button
-            RadioButton inHouse = new RadioButton();
-            inHouse.setToggleGroup(radio);
-            // inHouse.setSelected(true);
-            Label inHouseLabel = new Label("In-House");
-            
-            // Outsourced Radio Button
-            RadioButton outsourced = new RadioButton();
-            outsourced.setToggleGroup(radio);
-            Label outsourcedLabel = new Label("Outsourced");
-            
-            // Changes the Options depending on which RadioButton is selected
-            radio.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) -> {
-                if (inHouse.isSelected() == true)
-                    changeLabel("Company Name", "");
-                else
-                    changeLabel("Machine ID", "");
-            });
-            
-            
-            top.getChildren().addAll(label, inHouse, inHouseLabel, outsourced, outsourcedLabel);
+            top.getChildren().addAll(label);
 
             return top;
         }
         
-        // Labels on Left of Add Part Screen
-        public VBox modifyPartLeft() {
+        // Labels on Left of Add Product Screen
+        public VBox addProductLabels() {
             VBox left = new VBox();
             left.setSpacing(30);
-            left.setPadding(new Insets(15, 5, 5, 75));
+            left.setPadding(new Insets(45, 5, 5, 75));
             
             left.getChildren().addAll(idLabel, nameLabel, invLabel, priceLabel,
-                    maxLabel, compLabel);
+                    maxLabel);
             
             return left;
         }
         
-        // Right Text Fields on Add Part Screen
-        public VBox modifyPartRight() {
+        // Right Text Fields on Add Product Screen
+        public VBox addProductTextBoxes() {
             VBox right = new VBox();
             right.setSpacing(25);
-            right.setPadding(new Insets(10, 125, 5, 5));
+            right.setPadding(new Insets(40, 125, 5, 5));
             idBox.setFont(ITALICS);
             idBox.setDisable(true);
             idBox.setMaxWidth(125);
@@ -152,24 +133,36 @@ public class ModifyPartScreen {
             maxBox.setFont(ITALICS);
             maxBox.setMaxWidth(50);
             
-            minLabel.setPadding(new Insets(5, 15, 0, 15));
+            minLabel.setPadding(new Insets(0, 15, 0, 15));
             
             minBox.setFont(ITALICS);
             minBox.setMaxWidth(50);
             maxMin.getChildren().addAll(maxBox, minLabel, minBox);
-            
-            companyBox.setFont(ITALICS);
-            companyBox.setMaxWidth(100);
 
             right.getChildren().addAll(idBox, nameBox, invBox, priceBox, 
-                    maxMin, companyBox);
+                    maxMin);
             
             return right;
         }
         
-        public void changeLabel(String label, String field) {
-            compLabel.setText(label);
-            companyBox.setText(field);
+        public VBox rightLayout() {
+            VBox rightLayout = new VBox();
+            
+            // Parts Search Button
+            HBox search = new HBox();
+            search.setSpacing(15);
+            search.setPadding(new Insets(75, 250, 0, 0));
+            Button searchProducts = new Button("Search");
+            // Parts Search Field
+            TextField searchField = new TextField();
+            searchField.setMaxWidth(200);
+            search.getChildren().addAll(searchProducts, searchField);
+            
+            
+            
+            
+            
+            rightLayout.getChildren().addAll(search);
+            return rightLayout;
         }
-    
 }

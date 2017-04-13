@@ -20,9 +20,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Sherrill/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/AddProductScreen.java</file>
-            <file>file:/C:/Users/Sherrill/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/ModifyProductScreen.java</file>
-            <file>file:/C:/Users/Sherrill/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/InventoryManagement.java</file>
+            <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/InventoryManagement.java</file>
+            <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/AddProductScreen.java</file>
+            <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/AddPartScreen.java</file>
+            <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/ModifyProductScreen.java</file>
         </group>
     </open-files>
 </project-private>

@@ -11,6 +11,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -70,6 +72,7 @@ public class AddProductScreen {
         // Organizing overall layout
         mainPane.setLeft(leftPane);
         mainPane.setRight(rightPane);
+        mainPane.setBottom(btns);
         
         // Organizing left side of layout
         leftPane.setTop(addProductTop());
@@ -79,7 +82,8 @@ public class AddProductScreen {
         // Organizing right side of layout
         rightPane.setCenter(rightLayout());
         
-        Scene scene = new Scene(mainPane, 1200, 600);
+        
+        Scene scene = new Scene(mainPane, 1000, 600);
         stage.setScene(scene);
         stage.show();
     }
@@ -148,21 +152,69 @@ public class AddProductScreen {
         public VBox rightLayout() {
             VBox rightLayout = new VBox();
             
-            // Parts Search Button
-            HBox search = new HBox();
-            search.setSpacing(15);
-            search.setPadding(new Insets(75, 250, 0, 0));
+            // Top Search Button
+            HBox searchHBox = new HBox();
+            searchHBox.setSpacing(15);
+            searchHBox.setPadding(new Insets(75, 150, 0, 100));
             Button searchProducts = new Button("Search");
+            
+            // Middle Add Button
+            HBox addBtnHBox = new HBox();
+            addBtnHBox.setPadding(new Insets(15, 5, 5, 335));
+            Button addBtn = new Button("Add");
+            addBtn.setMinWidth(75);
+            addBtnHBox.getChildren().addAll(addBtn);
+            
+            // Bottom Delete Button
+            HBox delBtnHBox = new HBox();
+            delBtnHBox.setPadding(new Insets(15, 5, 5, 335));
+            Button delBtn = new Button("Delete");
+            delBtn.setMinWidth(75);
+            delBtnHBox.getChildren().addAll(delBtn);
+            
             // Parts Search Field
             TextField searchField = new TextField();
             searchField.setMaxWidth(200);
-            search.getChildren().addAll(searchProducts, searchField);
+            searchHBox.getChildren().addAll(searchProducts, searchField);
             
-            
-            
-            
-            
-            rightLayout.getChildren().addAll(search);
+            rightLayout.getChildren().addAll(searchHBox, rightTopTable(), addBtnHBox
+                                                , rightBottomTable(), delBtnHBox);
             return rightLayout;
+        }
+        
+        public VBox rightTopTable() {
+            TableView rightTable = new TableView();
+            TableColumn productID = new TableColumn("Part ID");
+            TableColumn productName = new TableColumn("Part Name");
+            productName.setMinWidth(100); // Setting Column width to minimum so 
+                                            // that user doesn't have to resize it
+            TableColumn invLevelProducts = new TableColumn("Inventory Level");
+            invLevelProducts.setMinWidth(100);
+            TableColumn priceProduct = new TableColumn("Price per Unit");   
+            priceProduct.setMinWidth(130);
+            rightTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+            final VBox topTable = new VBox();
+            topTable.setMaxHeight(150);
+            topTable.setPadding(new Insets(10, 150, 0, 0));
+            topTable.getChildren().addAll(rightTable);
+            return topTable;
+        }
+        
+        public VBox rightBottomTable() {
+            TableView rightBotTable = new TableView();
+            TableColumn productID = new TableColumn("Part ID");
+            TableColumn productName = new TableColumn("Part Name");
+            productName.setMinWidth(100); // Setting Column width to minimum so 
+                                            // that user doesn't have to resize it
+            TableColumn invLevelProducts = new TableColumn("Inventory Level");
+            invLevelProducts.setMinWidth(100);
+            TableColumn priceProduct = new TableColumn("Price per Unit");   
+            priceProduct.setMinWidth(130);
+            rightBotTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+            final VBox botTable = new VBox();
+            botTable.setMaxHeight(150);
+            botTable.setPadding(new Insets(20, 150, 0, 0));
+            botTable.getChildren().addAll(rightBotTable);
+            return botTable;
         }
 }

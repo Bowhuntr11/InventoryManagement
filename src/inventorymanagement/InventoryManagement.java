@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package inventorymanagement;
 
 import javafx.application.Application;
@@ -23,7 +19,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
- * @author Blake Sherrill
+ * @author Christopher Sherrill
  */
 
 public class InventoryManagement extends Application {
@@ -215,6 +211,10 @@ public class InventoryManagement extends Application {
         
         // Modify Parts Button for Products
         Button modifyBtnProduct = new Button("Modify");
+        modifyBtnProduct.setOnAction((ActionEvent e) -> {
+            ModifyProductScreen addProductScene = new ModifyProductScreen();
+            addProductScene.modifyProduct();
+        });
         
         // Delete Parts Button for Products
         Button deleteBtnProduct = new Button("Delete");

@@ -45,6 +45,9 @@ public class AddPartScreen {
     final private Label minLabel = new Label("Min");
     final private TextField compMachBox = new TextField("Comp Nm");
     
+    final private RadioButton inHouse = new RadioButton();
+    final private RadioButton outsourced = new RadioButton();
+    
     
     public void addPart() {
         Stage stage = new Stage();
@@ -59,6 +62,27 @@ public class AddPartScreen {
         // Need to Fix save Button
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
+            if (inHouse.isSelected() == true) {
+                InHousePart newPart = new InHousePart();
+                newPart.setPartID();
+                newPart.setName(nameBox.getText());
+                newPart.setInstock(Integer.parseInt(invBox.getText()));
+                newPart.setPrice(Integer.parseInt(invBox.getText()));
+                newPart.setMax(Integer.parseInt(invBox.getText()));
+                newPart.setMin(Integer.parseInt(invBox.getText()));
+                newPart.setMachineID(Integer.parseInt(compMachBox.getText()));
+                
+            }
+            else {
+                OutsourcedPart newPart = new OutsourcedPart();
+                newPart.setPartID();
+                newPart.setName(nameBox.getText());
+                newPart.setInstock(Integer.parseInt(invBox.getText()));
+                newPart.setPrice(Integer.parseInt(invBox.getText()));
+                newPart.setMax(Integer.parseInt(invBox.getText()));
+                newPart.setMin(Integer.parseInt(invBox.getText()));
+                newPart.setCompanyName(compMachBox.getText());
+            }
         });
         
         Button cancelBtn = new Button("Cancel");
@@ -89,22 +113,22 @@ public class AddPartScreen {
             label.setPadding(new Insets(0, 50, 0, 0));
             
             // In-House Radio Button
-            RadioButton inHouse = new RadioButton();
             inHouse.setToggleGroup(radio);
             inHouse.setSelected(true);
             Label inHouseLabel = new Label("In-House");
             
             // Outsourced Radio Button
-            RadioButton outsourced = new RadioButton();
             outsourced.setToggleGroup(radio);
             Label outsourcedLabel = new Label("Outsourced");
             
             // Changes the Options depending on which RadioButton is selected
             radio.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) -> {
-                if (inHouse.isSelected() == true)
+                if (inHouse.isSelected() == true) {
                     changeLabel("Company Name", "Comp Nm");
-                else
+                }
+                else {
                     changeLabel("Machine ID", "Mach ID");
+                }
             });
             
             

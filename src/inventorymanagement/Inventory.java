@@ -1,7 +1,7 @@
 
 package inventorymanagement;
 
-import java.util.ArrayList;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -9,24 +9,60 @@ import java.util.ArrayList;
  */
 public class Inventory {
     
-    private ArrayList<Product> products;
+    private ObservableList<Product> products;
     
+    // Add Product
     public void addProduct(Product product) {
         products.add(product);
     }
     
+    
+    // Remove Product
     public boolean removeProduct(int productID) {
-        // products.indexOf(this)
+        int i = 0;
+            while(i < products.size()) {
+                Product product = products.get(i);
+                if(product.getProductID() == productID) {
+                    products.remove(i);
+                    System.out.println("Removed");
+                    return true;
+                }
+                else {
+                    i++;
+                }
+            }
         return false;
     }
     
+    // Lookup Product
     public Product lookupProduct(int productID) {
-        Product product = products.get(productID);
-        return product;
+        int i = 0;
+            while(i < products.size()) {
+                Product product = products.get(i);
+                if(product.getProductID() == productID) {
+                    System.out.println("Found product");
+                    return product;
+                }
+                else {
+                    i++;
+                }
+            }
+        return null;
     }
     
-    public void updateProduct(int productID) {
-        
+    // Update Product
+    public void updateProduct(int productID, Product updatedProduct) {
+        int i = 0;
+            while(i < products.size()) {
+                Product product = products.get(i);
+                if(product.getProductID() == productID) {
+                    products.set(i, updatedProduct);
+                    System.out.println("Updated Product");
+                }
+                else {
+                    i++;
+                }
+        }
     }
     
 }

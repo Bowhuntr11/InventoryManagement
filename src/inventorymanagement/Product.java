@@ -1,7 +1,7 @@
 
 package inventorymanagement;
 
-import java.util.ArrayList;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Product {
     
-    private ArrayList<Part> parts;
+    private ObservableList<Part> parts;
     private int productID;
     private String name;
     private double price;
@@ -51,23 +51,55 @@ public class Product {
     
     //addPart
     public void addPart(Part part) {
-        
+        parts.add(part);
     }
     
     //removePart
-    public boolean removePart(Part part) {
+    public boolean removePart(int partID) {
+        int i = 0;
+            while(i < parts.size()) {
+                Part part = parts.get(i);
+                if(part.getPartID() == partID) {
+                    parts.remove(i);
+                    System.out.println("Removed");
+                    return true;
+                }
+                else {
+                    i++;
+                }
+            }
         return false;
     }
     
-    /* lookupPart
-    public part lookupPart(int partID) {
-        return part;
+    // lookupPart
+    public Part lookupPart(int partID) {
+        int i = 0;
+            while(i < parts.size()) {
+                Part part = parts.get(i);
+                if(part.getPartID() == partID) {
+                    System.out.println("Found part");
+                    return part;
+                }
+                else {
+                    i++;
+                }
+            }
+        return null;
     }
-    */ 
     
     //updatePart
-    public void updatePart(Part part) {
-        
+    public void updatePart(int partID, Part updatedPart) {
+        int i = 0;
+            while(i < parts.size()) {
+                Part part = parts.get(i);
+                if(part.getPartID() == partID) {
+                    parts.set(i, updatedPart);
+                    System.out.println("Updated part");
+                }
+                else {
+                    i++;
+                }
+        }
     }
     
     public void setProductID(int productID) {

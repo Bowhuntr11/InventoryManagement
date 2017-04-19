@@ -8,7 +8,7 @@ package inventorymanagement;
 public abstract class Part {
     
     private String name;
-    private int partID;
+    private int partID = 0;
     private double price;
     private int instock;
     private int min;
@@ -54,8 +54,9 @@ public abstract class Part {
         return max;
     }
 
-    public void setPartID(int partID) {
-        this.partID = partID;
+    // No int parameter since the PartID will be Auto Generated
+    public void setPartID() {
+        this.partID = partID + 1;
     }
 
     public int getPartID() {

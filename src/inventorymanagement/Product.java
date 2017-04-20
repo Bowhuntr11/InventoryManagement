@@ -17,12 +17,23 @@ public class Product {
     private int min;
     private int max;
     
-    public String name() {
+
+    
+
+    public String getName() {
         return name;
     }
-    
-    public double price() {
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
         return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public void setInstock(int instock) {
@@ -51,16 +62,16 @@ public class Product {
     
     //addPart
     public void addPart(Part part) {
-        parts.add(part);
+        this.parts.add(part);
     }
     
     //removePart
     public boolean removePart(int partID) {
         int i = 0;
-            while(i < parts.size()) {
-                Part part = parts.get(i);
+            while(i < this.parts.size()) {
+                Part part = this.parts.get(i);
                 if(part.getPartID() == partID) {
-                    parts.remove(i);
+                    this.parts.remove(i);
                     System.out.println("Removed");
                     return true;
                 }
@@ -74,8 +85,8 @@ public class Product {
     // lookupPart
     public Part lookupPart(int partID) {
         int i = 0;
-            while(i < parts.size()) {
-                Part part = parts.get(i);
+            while(i < this.parts.size()) {
+                Part part = this.parts.get(i);
                 if(part.getPartID() == partID) {
                     System.out.println("Found part");
                     return part;
@@ -90,10 +101,10 @@ public class Product {
     //updatePart
     public void updatePart(int partID, Part updatedPart) {
         int i = 0;
-            while(i < parts.size()) {
-                Part part = parts.get(i);
+            while(i < this.parts.size()) {
+                Part part = this.parts.get(i);
                 if(part.getPartID() == partID) {
-                    parts.set(i, updatedPart);
+                    this.parts.set(i, updatedPart);
                     System.out.println("Updated part");
                 }
                 else {

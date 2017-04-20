@@ -53,9 +53,15 @@ public class AddProductScreen {
         btns.setSpacing(20);
         btns.setPadding(new Insets(0, 100, 20, 0));
         
-        // Need to Fix save Button
+        // Save Product
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
+            Product newProduct = new Product();
+            newProduct.setName(nameBox.getText());
+            newProduct.setInstock(Integer.parseInt(invBox.getText()));
+            newProduct.setPrice(Integer.parseInt(priceBox.getText()));
+            newProduct.setMax(Integer.parseInt(maxBox.getText()));
+            newProduct.setMin(Integer.parseInt(minBox.getText()));
         });
         
         Button cancelBtn = new Button("Cancel");

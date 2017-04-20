@@ -59,7 +59,7 @@ public class AddPartScreen {
         btns.setSpacing(20);
         btns.setPadding(new Insets(0, 100, 20, 0));
         
-        // Need to Fix save Button
+        // Save Part
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
             if (inHouse.isSelected() == true) {
@@ -71,7 +71,6 @@ public class AddPartScreen {
                 newPart.setMax(Integer.parseInt(invBox.getText()));
                 newPart.setMin(Integer.parseInt(invBox.getText()));
                 newPart.setMachineID(Integer.parseInt(compMachBox.getText()));
-                
             }
             else {
                 OutsourcedPart newPart = new OutsourcedPart();

@@ -26,19 +26,19 @@ public class AddProductScreen {
     public static final Font ITALICS = Font.font("Arial", FontPosture.ITALIC,
             Font.getDefault().getSize());
     
-    final private Label idLabel = new Label("ID");
-    final private Label nameLabel = new Label("Name");
-    final private Label invLabel = new Label("Inv");
-    final private Label priceLabel = new Label("Price");
-    final private Label maxLabel = new Label("Max");
+    private final Label idLabel = new Label("ID");
+    private final Label nameLabel = new Label("Name");
+    private final Label invLabel = new Label("Inv");
+    private final Label priceLabel = new Label("Price");
+    private final Label maxLabel = new Label("Max");
     
-    final private TextField idBox = new TextField("Auto Gen - Disabled");
-    final private TextField nameBox = new TextField("Product Name");
-    final private TextField invBox = new TextField("Inv");
-    final private TextField priceBox = new TextField("Price");
-    final private TextField maxBox = new TextField("Max");
-    final private TextField minBox = new TextField("Min");
-    final private Label minLabel = new Label("Min");
+    private final TextField idBox = new TextField("Auto Gen - Disabled");
+    private final TextField nameBox = new TextField("Product Name");
+    private final TextField invBox = new TextField("Inv");
+    private final TextField priceBox = new TextField("Price");
+    private final TextField maxBox = new TextField("Max");
+    private final TextField minBox = new TextField("Min");
+    private final Label minLabel = new Label("Min");
     
     
     public void addProduct() {
@@ -62,6 +62,8 @@ public class AddProductScreen {
             newProduct.setPrice(Integer.parseInt(priceBox.getText()));
             newProduct.setMax(Integer.parseInt(maxBox.getText()));
             newProduct.setMin(Integer.parseInt(minBox.getText()));
+            Inventory.addProduct(newProduct);
+            stage.close();
         });
         
         Button cancelBtn = new Button("Cancel");

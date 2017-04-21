@@ -29,24 +29,24 @@ public class AddPartScreen {
     public static final Font ITALICS = Font.font("Arial", FontPosture.ITALIC,
             Font.getDefault().getSize());
     
-    final private Label compMachLabel = new Label("Comp Nm");
-    final private Label idLabel = new Label("ID");
-    final private Label nameLabel = new Label("Name");
-    final private Label invLabel = new Label("Inv");
-    final private Label priceLabel = new Label("Price/Cost");
-    final private Label maxLabel = new Label("Max");
+    private final Label compMachLabel = new Label("Comp Nm");
+    private final Label idLabel = new Label("ID");
+    private final Label nameLabel = new Label("Name");
+    private final Label invLabel = new Label("Inv");
+    private final Label priceLabel = new Label("Price/Cost");
+    private final Label maxLabel = new Label("Max");
     
-    final private TextField idBox = new TextField("Auto Gen - Disabled");
-    final private TextField nameBox = new TextField("Part Name");
-    final private TextField invBox = new TextField("Inv");
-    final private TextField priceBox = new TextField("Price/Cost");
-    final private TextField maxBox = new TextField("Max");
-    final private TextField minBox = new TextField("Min");
-    final private Label minLabel = new Label("Min");
-    final private TextField compMachBox = new TextField("Comp Nm");
+    private final TextField idBox = new TextField("Auto Gen - Disabled");
+    private final TextField nameBox = new TextField("Part Name");
+    private final TextField invBox = new TextField("Inv");
+    private final TextField priceBox = new TextField("Price/Cost");
+    private final TextField maxBox = new TextField("Max");
+    private final TextField minBox = new TextField("Min");
+    private final Label minLabel = new Label("Min");
+    private final TextField compMachBox = new TextField("Comp Nm");
     
-    final private RadioButton inHouse = new RadioButton();
-    final private RadioButton outsourced = new RadioButton();
+    private final RadioButton inHouse = new RadioButton();
+    private final RadioButton outsourced = new RadioButton();
     
     
     public void addPart() {
@@ -67,20 +67,24 @@ public class AddPartScreen {
                 newPart.setPartID();
                 newPart.setName(nameBox.getText());
                 newPart.setInstock(Integer.parseInt(invBox.getText()));
-                newPart.setPrice(Integer.parseInt(invBox.getText()));
+                newPart.setPrice(Double.parseDouble(invBox.getText()));
                 newPart.setMax(Integer.parseInt(invBox.getText()));
                 newPart.setMin(Integer.parseInt(invBox.getText()));
                 newPart.setMachineID(Integer.parseInt(compMachBox.getText()));
+                Inventory.addPart(newPart);
+                stage.close();
             }
             else {
                 OutsourcedPart newPart = new OutsourcedPart();
                 newPart.setPartID();
                 newPart.setName(nameBox.getText());
                 newPart.setInstock(Integer.parseInt(invBox.getText()));
-                newPart.setPrice(Integer.parseInt(invBox.getText()));
+                newPart.setPrice(Double.parseDouble(invBox.getText()));
                 newPart.setMax(Integer.parseInt(invBox.getText()));
                 newPart.setMin(Integer.parseInt(invBox.getText()));
                 newPart.setCompanyName(compMachBox.getText());
+                Inventory.addPart(newPart);
+                stage.close();
             }
         });
         

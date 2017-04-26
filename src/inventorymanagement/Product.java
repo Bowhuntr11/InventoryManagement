@@ -1,6 +1,7 @@
 
 package inventorymanagement;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -9,17 +10,15 @@ import javafx.collections.ObservableList;
  */
 public class Product {
     
-    private ObservableList<Part> parts;
+    private ObservableList<Part> parts = FXCollections.observableArrayList();
     private int productID;
     private String name;
     private double price;
     private int instock;
     private int min;
     private int max;
+    private static int counter; // Created for Autogen of partID, so that same partID can't be used
     
-
-    
-
     public String getName() {
         return name;
     }
@@ -60,12 +59,17 @@ public class Product {
         return max;
     }
     
-    //addPart
+    // Add Part associated with this product
     public void addPart(Part part) {
         this.parts.add(part);
     }
+
+    // Get Parts associated with this product
+    public ObservableList<Part> getParts() {
+        return parts;
+    }
     
-    //removePart
+    // Remove parts association with this product
     public boolean removePart(int partID) {
         int i = 0;
             while(i < this.parts.size()) {
@@ -82,7 +86,7 @@ public class Product {
         return false;
     }
     
-    // lookupPart
+    // Lookup Part
     public Part lookupPart(int partID) {
         int i = 0;
             while(i < this.parts.size()) {
@@ -98,7 +102,7 @@ public class Product {
         return null;
     }
     
-    //updatePart
+    // Update Part
     public void updatePart(int partID, Part updatedPart) {
         int i = 0;
             while(i < this.parts.size()) {
@@ -113,8 +117,9 @@ public class Product {
         }
     }
     
-    public void setProductID(int productID) {
-        this.productID = productID;
+    // Void since it is auto generated
+    public void setProductID() {
+        this.productID = ++counter;
     }
 
     public int getProductID() {

@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,6 +25,9 @@ import javafx.stage.Stage;
 
 public class InventoryManagement extends Application {
      
+    private final TableView<Part> leftTable = new TableView();
+    private final TableView<Product> rightTable = new TableView<>();
+    
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Inventory Management System");
@@ -92,13 +96,28 @@ public class InventoryManagement extends Application {
     
     // Table for Parts listing
     public VBox partsBox() {
-        TableView leftTable = new TableView();
         TableColumn partID = new TableColumn("Part ID");
+        partID.setCellValueFactory(
+                new PropertyValueFactory<>("partID"));
+        
         TableColumn partName = new TableColumn("Part Name");
+        partName.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        
+        
         TableColumn invLevelParts = new TableColumn("Inventory Level");
         invLevelParts.setMinWidth(100); // Setting Column width to minimum so that user doesn't have to resize it
+        invLevelParts.setCellValueFactory(
+                new PropertyValueFactory<>("instock"));
+        
+        
         TableColumn pricePart = new TableColumn("Price/Cost per Unit");   
         pricePart.setMinWidth(130); // Setting Column width to minimum so that user doesn't have to resize it
+        pricePart.setCellValueFactory(
+                new PropertyValueFactory<>("price"));
+        
+        
+        leftTable.setItems(Inventory.getPARTS());  // Populating Table with Parts ArrayList
         leftTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
         final VBox partsBox = new VBox();
         partsBox.setMaxHeight(200); // Setting MaxHeight for the table so it doesn't run off the screen
@@ -123,13 +142,14 @@ public class InventoryManagement extends Application {
         Button modifyBtnParts = new Button("Modify");
         modifyBtnParts.setOnAction((ActionEvent e) -> {
             ModifyPartScreen modPartScene = new ModifyPartScreen();
-            modPartScene.modifyPart();
+            modPartScene.modifyPart(leftTable.getSelectionModel().getSelectedItem());
         });
         
         // Delete Parts Button for Parts
         Button deleteBtnParts = new Button("Delete");
         deleteBtnParts.setOnAction((ActionEvent e) -> {
-            //NEED TO FIX
+            Part part = leftTable.getSelectionModel().getSelectedItem(); // Using polymorphism
+            Inventory.removePart(part.getPartID());
         });
 
         leftBottom.getChildren().addAll(addBtnParts, modifyBtnParts, deleteBtnParts);
@@ -180,15 +200,30 @@ public class InventoryManagement extends Application {
     
     // Table for Products listing
     public VBox productsBox() {
-        TableView rightTable = new TableView();
         TableColumn productID = new TableColumn("Product ID");
+        productID.setCellValueFactory(
+                new PropertyValueFactory<>("productID"));
+        
         TableColumn productName = new TableColumn("Product Name");
         // Setting Column width to minimum so that user doesn't have to resize it
         productName.setMinWidth(100);
+        productName.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        
+        
         TableColumn invLevelProducts = new TableColumn("Inventory Level");
         invLevelProducts.setMinWidth(100);
-        TableColumn priceProduct = new TableColumn("Price per Unit");   
+        invLevelProducts.setCellValueFactory(
+                new PropertyValueFactory<>("instock"));
+        
+        
+        TableColumn priceProduct = new TableColumn("Price per Unit");  
         priceProduct.setMinWidth(130);
+        priceProduct.setCellValueFactory(
+                new PropertyValueFactory<>("price"));
+        
+        
+        rightTable.setItems(Inventory.getPRODUCTS()); // Populating Table with Products ArrayList
         rightTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
         final VBox productsBox = new VBox();
         productsBox.setMaxHeight(200);
@@ -213,11 +248,15 @@ public class InventoryManagement extends Application {
         Button modifyBtnProduct = new Button("Modify");
         modifyBtnProduct.setOnAction((ActionEvent e) -> {
             ModifyProductScreen addProductScene = new ModifyProductScreen();
-            addProductScene.modifyProduct();
+            addProductScene.modifyProduct(rightTable.getSelectionModel().getSelectedItem());
         });
         
         // Delete Parts Button for Products
         Button deleteBtnProduct = new Button("Delete");
+        deleteBtnProduct.setOnAction((ActionEvent e) -> {
+            Product product = rightTable.getSelectionModel().getSelectedItem();
+            Inventory.removeProduct(product.getProductID());
+        });
 
         rightBottom.getChildren().addAll(addBtnProduct, modifyBtnProduct, deleteBtnProduct);
         rightBottom.setAlignment(Pos.CENTER_RIGHT);

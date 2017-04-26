@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -31,17 +32,17 @@ public class ModifyProductScreen {
     final private Label invLabel = new Label("Inv");
     final private Label priceLabel = new Label("Price");
     final private Label maxLabel = new Label("Max");
+    final private Label minLabel = new Label("");
     
-    final private TextField idBox = new TextField("Auto Gen - Disabled");
-    final private TextField nameBox = new TextField("Product Name");
-    final private TextField invBox = new TextField("Inv");
-    final private TextField priceBox = new TextField("Price");
-    final private TextField maxBox = new TextField("Max");
-    final private TextField minBox = new TextField("Min");
-    final private Label minLabel = new Label("Min");
+    final private TextField idBox = new TextField("");
+    final private TextField nameBox = new TextField("");
+    final private TextField invBox = new TextField("");
+    final private TextField priceBox = new TextField("");
+    final private TextField maxBox = new TextField("");
+    final private TextField minBox = new TextField("");
     
     
-    public void modifyProduct() {
+    public void modifyProduct(Product product) {
         Stage stage = new Stage();
         BorderPane mainPane = new BorderPane();
         BorderPane leftPane = new BorderPane();
@@ -73,10 +74,10 @@ public class ModifyProductScreen {
         // Organizing left side of layout
         leftPane.setTop(modifyProductTop());
         leftPane.setLeft(modifyProductLabels());
-        leftPane.setRight(modifyProductTextBoxes());
+        leftPane.setRight(modifyProductTextBoxes(product));
         
         // Organizing right side of layout
-        rightPane.setCenter(rightLayout());
+        rightPane.setCenter(rightLayout(product));
         
         
         Scene scene = new Scene(mainPane, 1000, 600);
@@ -111,32 +112,39 @@ public class ModifyProductScreen {
         }
         
         // Right Text Fields on Modify Product Screen
-        public VBox modifyProductTextBoxes() {
+        public VBox modifyProductTextBoxes(Product product) {
             VBox right = new VBox();
             right.setSpacing(25);
             right.setPadding(new Insets(40, 125, 5, 5));
+            
             idBox.setFont(ITALICS);
+            idBox.setText(String.valueOf(product.getProductID()));
             idBox.setDisable(true);
             idBox.setMaxWidth(125);
             
             nameBox.setFont(ITALICS);
             nameBox.setMaxWidth(100);
+            nameBox.setText(product.getName());
             
             invBox.setFont(ITALICS);
             invBox.setMaxWidth(100);
+            invBox.setText(String.valueOf(product.getInstock()));
             
             priceBox.setFont(ITALICS);
             priceBox.setMaxWidth(100);
+            priceBox.setText(String.valueOf(product.getPrice()));
 
             HBox maxMin = new HBox();
             
             maxBox.setFont(ITALICS);
             maxBox.setMaxWidth(50);
+            maxBox.setText(String.valueOf(product.getMax()));
             
             minLabel.setPadding(new Insets(0, 15, 0, 15));
-            
             minBox.setFont(ITALICS);
             minBox.setMaxWidth(50);
+            minBox.setText(String.valueOf(product.getMin()));
+            
             maxMin.getChildren().addAll(maxBox, minLabel, minBox);
 
             right.getChildren().addAll(idBox, nameBox, invBox, priceBox, 
@@ -145,7 +153,7 @@ public class ModifyProductScreen {
             return right;
         }
         
-        public VBox rightLayout() {
+        public VBox rightLayout(Product product) {
             VBox rightLayout = new VBox();
             
             // Top Search Button
@@ -174,21 +182,36 @@ public class ModifyProductScreen {
             searchHBox.getChildren().addAll(searchProducts, searchField);
             
             rightLayout.getChildren().addAll(searchHBox, rightTopTable(), addBtnHBox
-                                                , rightBottomTable(), delBtnHBox);
+                                                , rightBottomTable(product), delBtnHBox);
             return rightLayout;
         }
         
         public VBox rightTopTable() {
             TableView rightTable = new TableView();
-            TableColumn productID = new TableColumn("Part ID");
-            TableColumn productName = new TableColumn("Part Name");
-            productName.setMinWidth(100); // Setting Column width to minimum so 
+            
+            TableColumn partID = new TableColumn("Part ID");
+            partID.setCellValueFactory(
+                    new PropertyValueFactory<>("partID"));
+            
+            TableColumn partName = new TableColumn("Part Name");
+            partName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            partName.setMinWidth(100); // Setting Column width to minimum so 
                                             // that user doesn't have to resize it
-            TableColumn invLevelProducts = new TableColumn("Inventory Level");
-            invLevelProducts.setMinWidth(100);
-            TableColumn priceProduct = new TableColumn("Price per Unit");   
-            priceProduct.setMinWidth(130);
-            rightTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+                                            
+            TableColumn invLevelParts = new TableColumn("Inventory Level");
+            invLevelParts.setCellValueFactory(
+                    new PropertyValueFactory<>("instock"));
+            invLevelParts.setMinWidth(100);
+            
+            TableColumn pricePart = new TableColumn("Price per Unit");  
+            pricePart.setCellValueFactory(
+                    new PropertyValueFactory<>("price")); 
+            pricePart.setMinWidth(130);
+            
+            rightTable.setItems(Inventory.getPARTS());
+            rightTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            
             final VBox topTable = new VBox();
             topTable.setMaxHeight(150);
             topTable.setPadding(new Insets(10, 150, 0, 0));
@@ -196,17 +219,35 @@ public class ModifyProductScreen {
             return topTable;
         }
         
-        public VBox rightBottomTable() {
+        public VBox rightBottomTable(Product product) {
             TableView rightBotTable = new TableView();
-            TableColumn productID = new TableColumn("Part ID");
-            TableColumn productName = new TableColumn("Part Name");
-            productName.setMinWidth(100); // Setting Column width to minimum so 
+            
+            TableColumn partID = new TableColumn("Part ID");
+            partID.setCellValueFactory(
+                    new PropertyValueFactory<>("partID"));
+            
+            
+            TableColumn partName = new TableColumn("Part Name");
+            partName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            partName.setMinWidth(100); // Setting Column width to minimum so 
                                             // that user doesn't have to resize it
-            TableColumn invLevelProducts = new TableColumn("Inventory Level");
-            invLevelProducts.setMinWidth(100);
-            TableColumn priceProduct = new TableColumn("Price per Unit");   
-            priceProduct.setMinWidth(130);
-            rightBotTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+                                            
+                                            
+            TableColumn invLevelParts = new TableColumn("Inventory Level");
+            invLevelParts.setCellValueFactory(
+                    new PropertyValueFactory<>("instock"));
+            invLevelParts.setMinWidth(100);
+            
+            
+            TableColumn pricePart = new TableColumn("Price per Unit");   
+            pricePart.setCellValueFactory(
+                    new PropertyValueFactory<>("price"));
+            pricePart.setMinWidth(130);
+            
+            rightBotTable.setItems(product.getParts());
+            rightBotTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            
             final VBox botTable = new VBox();
             botTable.setMaxHeight(150);
             botTable.setPadding(new Insets(20, 150, 0, 0));

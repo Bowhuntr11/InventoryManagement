@@ -43,7 +43,10 @@ public class ModifyPartScreen {
     public TextField priceBox = new TextField();
     public TextField maxBox = new TextField();
     public TextField minBox = new TextField();
-    public TextField companyBox = new TextField();
+    public TextField compMachBox = new TextField();
+    
+    private final RadioButton inHouse = new RadioButton();
+    private final RadioButton outsourced = new RadioButton();
        
     
     public void modifyPart(Part part) {
@@ -60,7 +63,7 @@ public class ModifyPartScreen {
             priceBox.setText(String.valueOf(modPart.getPrice()));
             maxBox.setText(String.valueOf(modPart.getMax()));
             minBox.setText(String.valueOf(modPart.getMin()));
-            companyBox.setText(String.valueOf(modPart.getMachineID()));
+            compMachBox.setText(String.valueOf(modPart.getMachineID()));
         }
         else {
             OutsourcedPart modPart = (OutsourcedPart)part; // Downcasting part to proper subclass
@@ -71,7 +74,7 @@ public class ModifyPartScreen {
             priceBox.setText(String.valueOf(modPart.getPrice()));
             maxBox.setText(String.valueOf(modPart.getMax()));
             minBox.setText(String.valueOf(modPart.getMin()));
-            companyBox.setText(modPart.getCompanyName());
+            compMachBox.setText(modPart.getCompanyName());
         }
         
         // Buttons on Bottom
@@ -80,9 +83,33 @@ public class ModifyPartScreen {
         btns.setSpacing(20);
         btns.setPadding(new Insets(0, 100, 20, 0));
         
-        // Need to Fix save Button
+        // Save button calls update Part from the Part Class
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
+            if (inHouse.isSelected() == true) {
+                InHousePart newPart = new InHousePart();
+                newPart.setPartID(part.getPartID());
+                newPart.setName(nameBox.getText());
+                newPart.setInstock(Integer.parseInt(invBox.getText()));
+                newPart.setPrice(Double.parseDouble(invBox.getText()));
+                newPart.setMax(Integer.parseInt(invBox.getText()));
+                newPart.setMin(Integer.parseInt(invBox.getText()));
+                newPart.setMachineID(Integer.parseInt(compMachBox.getText()));
+                Inventory.updatePart(part.getPartID(), newPart);
+                stage.close();
+            }
+            else {
+                OutsourcedPart newPart = new OutsourcedPart();
+                newPart.setPartID(part.getPartID());
+                newPart.setName(nameBox.getText());
+                newPart.setInstock(Integer.parseInt(invBox.getText()));
+                newPart.setPrice(Double.parseDouble(invBox.getText()));
+                newPart.setMax(Integer.parseInt(invBox.getText()));
+                newPart.setMin(Integer.parseInt(invBox.getText()));
+                newPart.setCompanyName(compMachBox.getText());
+                Inventory.updatePart(part.getPartID(), newPart);
+                stage.close();
+            }
         });
         
         Button cancelBtn = new Button("Cancel");
@@ -113,32 +140,28 @@ public class ModifyPartScreen {
             label.setPadding(new Insets(0, 50, 0, 0));
             
             // In-House Radio Button
-            RadioButton inHouse = new RadioButton();
             inHouse.setToggleGroup(radio);
             // inHouse.setSelected(true);
             Label inHouseLabel = new Label("In-House");
             
             // Outsourced Radio Button
-            RadioButton outsourced = new RadioButton();
             outsourced.setToggleGroup(radio);
             Label outsourcedLabel = new Label("Outsourced");
             
             // Selects the button that the part being modified is
             if (part.getClass().equals(InHousePart.class)) {
                 inHouse.setSelected(true);
-                outsourced.setDisable(true);
             }
             else {
                 outsourced.setSelected(true);
-                inHouse.setDisable(true);
             }
             
             // Changes the Text Fields depending on which RadioButton is selected
             radio.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) -> {
                 if (inHouse.isSelected() == true)
-                    changeLabel("Company Name");
-                else
                     changeLabel("Machine ID");
+                else
+                    changeLabel("Company Name");
             });
             
             
@@ -188,11 +211,11 @@ public class ModifyPartScreen {
             minBox.setMaxWidth(50);
             maxMin.getChildren().addAll(maxBox, minLabel, minBox);
             
-            companyBox.setFont(ITALICS);
-            companyBox.setMaxWidth(100);
+            compMachBox.setFont(ITALICS);
+            compMachBox.setMaxWidth(100);
 
             right.getChildren().addAll(idBox, nameBox, invBox, priceBox, 
-                    maxMin, companyBox);
+                    maxMin, compMachBox);
             
             return right;
         }

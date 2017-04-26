@@ -59,9 +59,14 @@ public abstract class Part {
     public void setPartID() {
         this.partID = ++counter;
     }
+    
+    // This method is called for updating a part instead of creating a new one.
+    public void setPartID(int partID) {
+        this.partID = partID;
+    }
 
     public int getPartID() {
-        return partID;
+        return this.partID;
     }
     
     

@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 public final class Inventory {
     
     private static final ObservableList<Product> PRODUCTS = FXCollections.observableArrayList();
-    private static final ObservableList<Part> PARTS = FXCollections.observableArrayList();
+    private static final ObservableList<Part> ALLPARTS = FXCollections.observableArrayList();
 
     // Add Product
     public static void addProduct(Product product) {
@@ -22,7 +22,7 @@ public final class Inventory {
     // Remove Product
     public static boolean removeProduct(int productID) {
         int i = 0;
-            while(i < PRODUCTS.size()) {
+        while(i < PRODUCTS.size()) {
                 Product product = PRODUCTS.get(i);
                 if(product.getProductID() == productID) {
                     PRODUCTS.remove(i);
@@ -39,7 +39,7 @@ public final class Inventory {
     // Lookup Product
     public static Product lookupProduct(int productID) {
         int i = 0;
-            while(i < PRODUCTS.size()) {
+        while(i < PRODUCTS.size()) {
                 Product product = PRODUCTS.get(i);
                 if(product.getProductID() == productID) {
                     System.out.println("Found product");
@@ -55,11 +55,12 @@ public final class Inventory {
     // Update Product
     public static void updateProduct(int productID, Product updatedProduct) {
         int i = 0;
-            while(i < PRODUCTS.size()) {
+        while(i < PRODUCTS.size()) {
                 Product product = PRODUCTS.get(i);
                 if(product.getProductID() == productID) {
                     PRODUCTS.set(i, updatedProduct);
                     System.out.println("Updated Product");
+                    break;
                 }
                 else {
                     i++;
@@ -70,18 +71,18 @@ public final class Inventory {
 
     // Add Part
     public static void addPart(Part part) {
-        PARTS.add(part);
-        System.out.println("Added Part to index# "  + PARTS.indexOf(part));
+        ALLPARTS.add(part);
+        System.out.println("Added Part to index# "  + ALLPARTS.indexOf(part));
     }
     
     
     // Remove Part
     public static boolean removePart(int partID) {
         int i = 0;
-            while(i < PARTS.size()) {
-                Part part = PARTS.get(i);
+        while(i < ALLPARTS.size()) {
+                Part part = ALLPARTS.get(i);
                 if(part.getPartID() == partID) {
-                    PARTS.remove(i);
+                    ALLPARTS.remove(i);
                     System.out.println("Removed");
                     return true;
                 }
@@ -95,8 +96,8 @@ public final class Inventory {
     // Lookup Part
     public static Part lookupPart(int partID) {
         int i = 0;
-            while(i < PARTS.size()) {
-                Part part = PARTS.get(i);
+        while(i < ALLPARTS.size()) {
+                Part part = ALLPARTS.get(i);
                 if(part.getPartID() == partID) {
                     System.out.println("Found part");
                     return part;
@@ -111,11 +112,12 @@ public final class Inventory {
     // Update Part
     public static void updatePart(int partID, Part updatedPart) {
         int i = 0;
-            while(i < PARTS.size()) {
-                Part part = PARTS.get(i);
+        while(i < ALLPARTS.size()) {
+                Part part = ALLPARTS.get(i);
                 if(part.getPartID() == partID) {
-                    PARTS.set(i, updatedPart);
+                    ALLPARTS.set(i, updatedPart);
                     System.out.println("Updated Part");
+                    break;
                 }
                 else {
                     i++;
@@ -127,8 +129,8 @@ public final class Inventory {
         return PRODUCTS;
     }
 
-    public static ObservableList<Part> getPARTS() {
-        return PARTS;
+    public static ObservableList<Part> getALLPARTS() {
+        return ALLPARTS;
     }
     
     

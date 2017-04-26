@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
  */
 public class Product {
     
-    private final ObservableList<Part> parts = FXCollections.observableArrayList();
+    private ObservableList<Part> parts = FXCollections.observableArrayList();
     private int productID;
     private String name;
     private double price;
@@ -69,6 +69,12 @@ public class Product {
         return parts;
     }
     
+    // Copies parts list to allow new updated Product
+    public ObservableList<Part> setParts(ObservableList<Part> oldParts) {
+        this.parts = oldParts;
+        return this.parts;
+    }
+    
     // Remove parts association with this product
     public boolean removePart(int partID) {
         int i = 0;
@@ -109,7 +115,9 @@ public class Product {
                 Part part = this.parts.get(i);
                 if(part.getPartID() == partID) {
                     this.parts.set(i, updatedPart);
-                    System.out.println("Updated part");
+                    System.out.println(i);
+                    System.out.println(updatedPart);
+                    break;
                 }
                 else {
                     i++;
@@ -117,9 +125,14 @@ public class Product {
         }
     }
     
-    // Void since it is auto generated
+    // No int parameter since the PartID will be Auto Generated
     public void setProductID() {
         this.productID = ++counter;
+    }
+    
+    // This method is called for updating a part instead of creating a new one.
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public int getProductID() {

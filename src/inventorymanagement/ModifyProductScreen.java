@@ -1,6 +1,8 @@
 
 package inventorymanagement;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -41,6 +43,10 @@ public class ModifyProductScreen {
     final private TextField maxBox = new TextField("");
     final private TextField minBox = new TextField("");
     
+    private Product newProduct = new Product();
+    private final TableView<Part> rightTopTable = new TableView();
+    private final TableView<Part> rightBottomTable = new TableView();
+    
     
     public void modifyProduct(Product product) {
         Stage stage = new Stage();
@@ -54,11 +60,20 @@ public class ModifyProductScreen {
         btns.setSpacing(20);
         btns.setPadding(new Insets(0, 100, 20, 0));
         
-        // Need to Fix save Button
+        // Save Button
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
+            newProduct.setProductID(product.getProductID());
+            newProduct.setName(nameBox.getText());
+            newProduct.setInstock(Integer.parseInt(invBox.getText()));
+            newProduct.setPrice(Integer.parseInt(priceBox.getText()));
+            newProduct.setMax(Integer.parseInt(maxBox.getText()));
+            newProduct.setMin(Integer.parseInt(minBox.getText()));
+            Inventory.updateProduct(product.getProductID(), newProduct);
+            stage.close();
         });
         
+        // Cancel Button
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction((ActionEvent e) -> {
             stage.close();
@@ -160,12 +175,21 @@ public class ModifyProductScreen {
             HBox searchHBox = new HBox();
             searchHBox.setSpacing(15);
             searchHBox.setPadding(new Insets(75, 150, 0, 100));
-            Button searchProducts = new Button("Search");
+            Button searchPartsTop = new Button("Search");
             
             // Middle Add Button
             HBox addBtnHBox = new HBox();
             addBtnHBox.setPadding(new Insets(15, 5, 5, 335));
             Button addBtn = new Button("Add");
+                addBtn.setOnAction((ActionEvent e) -> {
+                    if (!rightBottomTable.getItems().contains(rightTopTable.getSelectionModel().getSelectedItem())) {
+                    newProduct.addPart(rightTopTable.getSelectionModel().getSelectedItem());
+                    System.out.println("Added!");
+                    }
+                    else {
+                        System.out.println("Already added!");
+                    }
+                });
             addBtn.setMinWidth(75);
             addBtnHBox.getChildren().addAll(addBtn);
             
@@ -173,13 +197,29 @@ public class ModifyProductScreen {
             HBox delBtnHBox = new HBox();
             delBtnHBox.setPadding(new Insets(15, 5, 5, 335));
             Button delBtn = new Button("Delete");
+            delBtn.setOnAction((ActionEvent e) -> {
+                Part part = rightBottomTable.getSelectionModel().getSelectedItem();
+                newProduct.removePart(part.getPartID());
+            });
             delBtn.setMinWidth(75);
             delBtnHBox.getChildren().addAll(delBtn);
             
             // Parts Search Field
             TextField searchField = new TextField();
             searchField.setMaxWidth(200);
-            searchHBox.getChildren().addAll(searchProducts, searchField);
+            
+            
+            
+            // Parts Search Button Action - Finds the part in Inventory by Part IDthen adds it to 
+            // a new ObservableList to populate the tableview
+            searchPartsTop.setOnAction((ActionEvent e) -> {
+                Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText()));
+                ObservableList<Part> searchPart = FXCollections.observableArrayList();
+                searchPart.add(part);
+                rightTopTable.setItems(searchPart);
+            });
+            
+            searchHBox.getChildren().addAll(searchPartsTop, searchField);
             
             rightLayout.getChildren().addAll(searchHBox, rightTopTable(), addBtnHBox
                                                 , rightBottomTable(product), delBtnHBox);
@@ -187,7 +227,6 @@ public class ModifyProductScreen {
         }
         
         public VBox rightTopTable() {
-            TableView rightTable = new TableView();
             
             TableColumn partID = new TableColumn("Part ID");
             partID.setCellValueFactory(
@@ -209,18 +248,17 @@ public class ModifyProductScreen {
                     new PropertyValueFactory<>("price")); 
             pricePart.setMinWidth(130);
             
-            rightTable.setItems(Inventory.getPARTS());
-            rightTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            rightTopTable.setItems(Inventory.getALLPARTS());
+            rightTopTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
             
             final VBox topTable = new VBox();
             topTable.setMaxHeight(150);
             topTable.setPadding(new Insets(10, 150, 0, 0));
-            topTable.getChildren().addAll(rightTable);
+            topTable.getChildren().addAll(rightTopTable);
             return topTable;
         }
         
         public VBox rightBottomTable(Product product) {
-            TableView rightBotTable = new TableView();
             
             TableColumn partID = new TableColumn("Part ID");
             partID.setCellValueFactory(
@@ -245,13 +283,15 @@ public class ModifyProductScreen {
                     new PropertyValueFactory<>("price"));
             pricePart.setMinWidth(130);
             
-            rightBotTable.setItems(product.getParts());
-            rightBotTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            // Copying associated parts list to the newProduct
+            newProduct = product;
+            rightBottomTable.setItems(newProduct.getParts());
+            rightBottomTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
             
             final VBox botTable = new VBox();
             botTable.setMaxHeight(150);
             botTable.setPadding(new Insets(20, 150, 0, 0));
-            botTable.getChildren().addAll(rightBotTable);
+            botTable.getChildren().addAll(rightBottomTable);
             return botTable;
         }
 }

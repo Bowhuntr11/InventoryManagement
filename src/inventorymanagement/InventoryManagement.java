@@ -128,7 +128,7 @@ public class InventoryManagement extends Application {
                 new PropertyValueFactory<>("price"));
         
         
-        leftTable.setItems(Inventory.getPARTS());  // Populating Table with Parts ArrayList
+        leftTable.setItems(Inventory.getALLPARTS());  // Populating Table with Parts ArrayList
         leftTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
         final VBox partsBox = new VBox();
         partsBox.setMaxHeight(200); // Setting MaxHeight for the table so it doesn't run off the screen

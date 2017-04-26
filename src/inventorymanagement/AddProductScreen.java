@@ -239,7 +239,7 @@ public class AddProductScreen {
                     new PropertyValueFactory<>("price")); 
             pricePart.setMinWidth(130);
             
-            rightTopTable.setItems(Inventory.getPARTS());
+            rightTopTable.setItems(Inventory.getALLPARTS());
             rightTopTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
             
             final VBox topTable = new VBox();

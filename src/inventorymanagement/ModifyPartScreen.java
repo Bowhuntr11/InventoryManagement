@@ -37,19 +37,43 @@ public class ModifyPartScreen {
     final private Label maxLabel = new Label("Max");
     final private Label minLabel = new Label("Min");
     
-    public TextField idBox = new TextField("**NEEDS ID**");
+    public TextField idBox = new TextField();
     public TextField nameBox = new TextField();
     public TextField invBox = new TextField();
     public TextField priceBox = new TextField();
     public TextField maxBox = new TextField();
     public TextField minBox = new TextField();
     public TextField companyBox = new TextField();
+       
     
-    
-    public void modifyPart() {
+    public void modifyPart(Part part) {
         Stage stage = new Stage();
         BorderPane bp = new BorderPane();
-
+        
+        // Populating Textfields with part grabbed from main screen
+        if (part.getClass().equals(InHousePart.class)) {
+            InHousePart modPart = (InHousePart)part; // Downcasting part to proper subclass
+            idBox.setText(String.valueOf(modPart.getPartID()));
+            idBox.setDisable(true); // Making sure ID can't be changed
+            nameBox.setText(modPart.getName());
+            invBox.setText(String.valueOf(modPart.getInstock()));
+            priceBox.setText(String.valueOf(modPart.getPrice()));
+            maxBox.setText(String.valueOf(modPart.getMax()));
+            minBox.setText(String.valueOf(modPart.getMin()));
+            companyBox.setText(String.valueOf(modPart.getMachineID()));
+        }
+        else {
+            OutsourcedPart modPart = (OutsourcedPart)part; // Downcasting part to proper subclass
+            idBox.setText(String.valueOf(modPart.getPartID()));
+            idBox.setDisable(true); // Making sure ID can't be changed
+            nameBox.setText(modPart.getName());
+            invBox.setText(String.valueOf(modPart.getInstock()));
+            priceBox.setText(String.valueOf(modPart.getPrice()));
+            maxBox.setText(String.valueOf(modPart.getMax()));
+            minBox.setText(String.valueOf(modPart.getMin()));
+            companyBox.setText(modPart.getCompanyName());
+        }
+        
         // Buttons on Bottom
         HBox btns = new HBox();
         btns.setAlignment(Pos.CENTER_RIGHT);
@@ -68,7 +92,7 @@ public class ModifyPartScreen {
         
         btns.getChildren().addAll(saveBtn, cancelBtn);
         
-        bp.setTop(modifyPartTop());
+        bp.setTop(modifyPartTop(part));
         bp.setLeft(modifyPartLeft());
         bp.setRight(modifyPartRight());
         bp.setBottom(btns);
@@ -78,8 +102,8 @@ public class ModifyPartScreen {
         stage.show();
     }
     
-        // Top Items on Add Part Screen
-        public HBox modifyPartTop() {
+        // Top Items on Modify Part Screen
+        public HBox modifyPartTop(Part part) {
             ToggleGroup radio = new ToggleGroup();
             HBox top = new HBox();
             top.setSpacing(20);
@@ -99,12 +123,22 @@ public class ModifyPartScreen {
             outsourced.setToggleGroup(radio);
             Label outsourcedLabel = new Label("Outsourced");
             
-            // Changes the Options depending on which RadioButton is selected
+            // Selects the button that the part being modified is
+            if (part.getClass().equals(InHousePart.class)) {
+                inHouse.setSelected(true);
+                outsourced.setDisable(true);
+            }
+            else {
+                outsourced.setSelected(true);
+                inHouse.setDisable(true);
+            }
+            
+            // Changes the Text Fields depending on which RadioButton is selected
             radio.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) -> {
                 if (inHouse.isSelected() == true)
-                    changeLabel("Company Name", "");
+                    changeLabel("Company Name");
                 else
-                    changeLabel("Machine ID", "");
+                    changeLabel("Machine ID");
             });
             
             
@@ -113,7 +147,7 @@ public class ModifyPartScreen {
             return top;
         }
         
-        // Labels on Left of Add Part Screen
+        // Labels on Left of Modify Part Screen
         public VBox modifyPartLeft() {
             VBox left = new VBox();
             left.setSpacing(30);
@@ -125,7 +159,7 @@ public class ModifyPartScreen {
             return left;
         }
         
-        // Right Text Fields on Add Part Screen
+        // Right Text Fields on Modify Part Screen
         public VBox modifyPartRight() {
             VBox right = new VBox();
             right.setSpacing(25);
@@ -163,9 +197,8 @@ public class ModifyPartScreen {
             return right;
         }
         
-        public void changeLabel(String label, String field) {
+        public void changeLabel(String label) {
             compLabel.setText(label);
-            companyBox.setText(field);
         }
     
 }

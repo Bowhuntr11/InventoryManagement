@@ -29,7 +29,7 @@ public class AddPartScreen {
     public static final Font ITALICS = Font.font("Arial", FontPosture.ITALIC,
             Font.getDefault().getSize());
     
-    private final Label compMachLabel = new Label("Comp Nm");
+    private final Label compMachLabel = new Label("Mach ID");
     private final Label idLabel = new Label("ID");
     private final Label nameLabel = new Label("Name");
     private final Label invLabel = new Label("Inv");
@@ -43,7 +43,7 @@ public class AddPartScreen {
     private final TextField maxBox = new TextField("Max");
     private final TextField minBox = new TextField("Min");
     private final Label minLabel = new Label("Min");
-    private final TextField compMachBox = new TextField("Comp Nm");
+    private final TextField compMachBox = new TextField("Machine ID");
     
     private final RadioButton inHouse = new RadioButton();
     private final RadioButton outsourced = new RadioButton();
@@ -127,10 +127,10 @@ public class AddPartScreen {
             // Changes the Options depending on which RadioButton is selected
             radio.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) -> {
                 if (inHouse.isSelected() == true) {
-                    changeLabel("Company Name", "Comp Nm");
+                    changeLabel("Machine ID", "Mach ID");
                 }
                 else {
-                    changeLabel("Machine ID", "Mach ID");
+                    changeLabel("Company Name", "Comp Nm");
                 }
             });
             

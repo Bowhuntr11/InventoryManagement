@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,6 +41,11 @@ public class AddProductScreen {
     private final TextField minBox = new TextField("Min");
     private final Label minLabel = new Label("Min");
     
+    private Product newProduct = new Product();
+    private final TableView<Part> rightTopTable = new TableView();
+    private final TableView<Part> rightBotTable = new TableView();
+            
+    
     
     public void addProduct() {
         Stage stage = new Stage();
@@ -56,7 +62,7 @@ public class AddProductScreen {
         // Save Product
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
-            Product newProduct = new Product();
+            newProduct.setProductID();
             newProduct.setName(nameBox.getText());
             newProduct.setInstock(Integer.parseInt(invBox.getText()));
             newProduct.setPrice(Integer.parseInt(priceBox.getText()));
@@ -68,6 +74,7 @@ public class AddProductScreen {
         
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction((ActionEvent e) -> {
+            newProduct = null;
             stage.close();
         });
         
@@ -162,10 +169,19 @@ public class AddProductScreen {
             searchHBox.setPadding(new Insets(75, 150, 0, 100));
             Button searchProducts = new Button("Search");
             
-            // Middle Add Button
+            // Middle Add Button - It makes sure a part hasn't already been added
             HBox addBtnHBox = new HBox();
             addBtnHBox.setPadding(new Insets(15, 5, 5, 335));
             Button addBtn = new Button("Add");
+                addBtn.setOnAction((ActionEvent e) -> {
+                    if (!rightBotTable.getItems().contains(rightTopTable.getSelectionModel().getSelectedItem())) {
+                    newProduct.addPart(rightTopTable.getSelectionModel().getSelectedItem());
+                    }
+                    else {
+                        System.out.println("Already added!");
+                    }
+                });
+                        
             addBtn.setMinWidth(75);
             addBtnHBox.getChildren().addAll(addBtn);
             
@@ -173,6 +189,10 @@ public class AddProductScreen {
             HBox delBtnHBox = new HBox();
             delBtnHBox.setPadding(new Insets(15, 5, 5, 335));
             Button delBtn = new Button("Delete");
+            delBtn.setOnAction((ActionEvent e) -> {
+                Part part = rightBotTable.getSelectionModel().getSelectedItem();
+                newProduct.removePart(part.getPartID());
+            });
             delBtn.setMinWidth(75);
             delBtnHBox.getChildren().addAll(delBtn);
             
@@ -181,40 +201,70 @@ public class AddProductScreen {
             searchField.setMaxWidth(200);
             searchHBox.getChildren().addAll(searchProducts, searchField);
             
-            rightLayout.getChildren().addAll(searchHBox, rightTopTable(), addBtnHBox
-                                                , rightBottomTable(), delBtnHBox);
+            rightLayout.getChildren().addAll(searchHBox, rightTopTableBox(), addBtnHBox
+                                                , rightBottomTableBox(), delBtnHBox);
             return rightLayout;
         }
         
-        public VBox rightTopTable() {
-            TableView rightTable = new TableView();
-            TableColumn productID = new TableColumn("Part ID");
-            TableColumn productName = new TableColumn("Part Name");
-            productName.setMinWidth(100); // Setting Column width to minimum so 
+        public VBox rightTopTableBox() {
+            
+            TableColumn partID = new TableColumn("Part ID");
+            partID.setCellValueFactory(
+                    new PropertyValueFactory<>("partID"));
+            
+            TableColumn partName = new TableColumn("Part Name");
+            partName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            partName.setMinWidth(100); // Setting Column width to minimum so 
                                             // that user doesn't have to resize it
-            TableColumn invLevelProducts = new TableColumn("Inventory Level");
-            invLevelProducts.setMinWidth(100);
-            TableColumn priceProduct = new TableColumn("Price per Unit");   
-            priceProduct.setMinWidth(130);
-            rightTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+                                            
+            TableColumn invLevelParts = new TableColumn("Inventory Level");
+            invLevelParts.setCellValueFactory(
+                    new PropertyValueFactory<>("instock"));
+            invLevelParts.setMinWidth(100);
+            
+            TableColumn pricePart = new TableColumn("Price per Unit");  
+            pricePart.setCellValueFactory(
+                    new PropertyValueFactory<>("price")); 
+            pricePart.setMinWidth(130);
+            
+            rightTopTable.setItems(Inventory.getPARTS());
+            rightTopTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            
             final VBox topTable = new VBox();
             topTable.setMaxHeight(150);
             topTable.setPadding(new Insets(10, 150, 0, 0));
-            topTable.getChildren().addAll(rightTable);
+            topTable.getChildren().addAll(rightTopTable);
             return topTable;
         }
         
-        public VBox rightBottomTable() {
-            TableView rightBotTable = new TableView();
-            TableColumn productID = new TableColumn("Part ID");
-            TableColumn productName = new TableColumn("Part Name");
-            productName.setMinWidth(100); // Setting Column width to minimum so 
+        public VBox rightBottomTableBox() {
+            TableColumn partID = new TableColumn("Part ID");
+            partID.setCellValueFactory(
+                    new PropertyValueFactory<>("partID"));
+            
+            
+            TableColumn partName = new TableColumn("Part Name");
+            partName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            partName.setMinWidth(100); // Setting Column width to minimum so 
                                             // that user doesn't have to resize it
-            TableColumn invLevelProducts = new TableColumn("Inventory Level");
-            invLevelProducts.setMinWidth(100);
-            TableColumn priceProduct = new TableColumn("Price per Unit");   
-            priceProduct.setMinWidth(130);
-            rightBotTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
+                                            
+                                            
+            TableColumn invLevelParts = new TableColumn("Inventory Level");
+            invLevelParts.setCellValueFactory(
+                    new PropertyValueFactory<>("instock"));
+            invLevelParts.setMinWidth(100);
+            
+            
+            TableColumn pricePart = new TableColumn("Price per Unit");   
+            pricePart.setCellValueFactory(
+                    new PropertyValueFactory<>("price"));
+            pricePart.setMinWidth(130);
+            
+            rightBotTable.setItems(newProduct.getParts());
+            rightBotTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            
             final VBox botTable = new VBox();
             botTable.setMaxHeight(150);
             botTable.setPadding(new Insets(20, 150, 0, 0));

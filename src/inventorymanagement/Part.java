@@ -8,11 +8,12 @@ package inventorymanagement;
 public abstract class Part {
     
     private String name;
-    private int partID = 0;
+    private int partID;
     private double price;
     private int instock;
     private int min;
     private int max;
+    private static int counter; // Created for Autogen of partID, so that same partID can't be used
 
     public void setName(String name) {
         this.name = name;
@@ -56,7 +57,7 @@ public abstract class Part {
 
     // No int parameter since the PartID will be Auto Generated
     public void setPartID() {
-        this.partID = partID + 1;
+        this.partID = ++counter;
     }
 
     public int getPartID() {

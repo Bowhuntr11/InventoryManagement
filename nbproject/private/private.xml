@@ -5,7 +5,7 @@
             <url>src/inventorymanagement/InventoryManagement.java</url>
             <bookmark id="2">
                 <name/>
-                <line>131</line>
+                <line>142</line>
                 <key/>
             </bookmark>
         </file>
@@ -22,8 +22,10 @@
         <group>
             <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/InventoryManagement.java</file>
             <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/AddProductScreen.java</file>
+            <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/Product.java</file>
             <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/Inventory.java</file>
             <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/AddPartScreen.java</file>
+            <file>file:/C:/Users/bowhu/OneDrive/Documents/NetBeansProjects/InventoryManagement/src/inventorymanagement/Part.java</file>
         </group>
     </open-files>
 </project-private>

@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
  */
 public class Product {
     
-    private ObservableList<Part> parts = FXCollections.observableArrayList();
+    private final ObservableList<Part> parts = FXCollections.observableArrayList();
     private int productID;
     private String name;
     private double price;

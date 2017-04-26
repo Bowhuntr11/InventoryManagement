@@ -2,6 +2,8 @@
 package inventorymanagement;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -86,8 +88,17 @@ public class InventoryManagement extends Application {
         Button searchParts = new Button("Search");
         
         // Parts Search Field
-        TextField searchField = new TextField();
+        TextField searchField = new TextField("Part ID");
         searchField.setMaxWidth(200);
+        
+        // Parts Search Button Action - Finds the part in Inventory by Part IDthen adds it to 
+        // a new ObservableList to populate the tableview
+        searchParts.setOnAction((ActionEvent e) -> {
+            Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText()));
+            ObservableList<Part> searchPart = FXCollections.observableArrayList();
+            searchPart.add(part);
+            leftTable.setItems(searchPart);
+        });
 
         leftTop.getChildren().addAll(leftLabel, searchParts, searchField);
 
@@ -181,17 +192,26 @@ public class InventoryManagement extends Application {
         rightTop.setPadding(new Insets(15, 12, 15, 12));
         rightTop.setSpacing(10);
 
-        // Parts Label
+        // Products Label
         Label rightLabel = new Label("Products");
         rightLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         rightLabel.setPadding(new Insets(0, 125, 0, 0));
 
-        // Parts Search Button
+        // Product Search Button
         Button searchProducts = new Button("Search");
         
-        // Parts Search Field
-        TextField searchField = new TextField();
+        // Product Search Field
+        TextField searchField = new TextField("Product ID");
         searchField.setMaxWidth(200);
+        
+       // Product Search Button Action - Finds the product in Inventory by Product IDthen adds it to 
+        // a new ObservableList to populate the tableview
+        searchProducts.setOnAction((ActionEvent e) -> {
+            Product product = Inventory.lookupProduct(Integer.parseInt(searchField.getText()));
+            ObservableList<Product> searchProduct = FXCollections.observableArrayList();
+            searchProduct.add(product);
+            rightTable.setItems(searchProduct);
+        });
 
         rightTop.getChildren().addAll(rightLabel, searchProducts, searchField);
 

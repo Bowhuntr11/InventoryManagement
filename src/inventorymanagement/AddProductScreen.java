@@ -1,6 +1,8 @@
 
 package inventorymanagement;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -167,7 +169,7 @@ public class AddProductScreen {
             HBox searchHBox = new HBox();
             searchHBox.setSpacing(15);
             searchHBox.setPadding(new Insets(75, 150, 0, 100));
-            Button searchProducts = new Button("Search");
+            Button searchPartsTop = new Button("Search");
             
             // Middle Add Button - It makes sure a part hasn't already been added
             HBox addBtnHBox = new HBox();
@@ -197,9 +199,18 @@ public class AddProductScreen {
             delBtnHBox.getChildren().addAll(delBtn);
             
             // Parts Search Field
-            TextField searchField = new TextField();
+            TextField searchField = new TextField("Part ID");
             searchField.setMaxWidth(200);
-            searchHBox.getChildren().addAll(searchProducts, searchField);
+            searchHBox.getChildren().addAll(searchPartsTop, searchField);
+            
+            // Parts Search Button Action - Finds the part in Inventory by Part IDthen adds it to 
+            // a new ObservableList to populate the tableview
+            searchPartsTop.setOnAction((ActionEvent e) -> {
+                Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText()));
+                ObservableList<Part> searchPart = FXCollections.observableArrayList();
+                searchPart.add(part);
+                rightTopTable.setItems(searchPart);
+            });
             
             rightLayout.getChildren().addAll(searchHBox, rightTopTableBox(), addBtnHBox
                                                 , rightBottomTableBox(), delBtnHBox);

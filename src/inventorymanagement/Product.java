@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
  */
 public class Product {
     
-    private ObservableList<Part> parts = FXCollections.observableArrayList();
+    private final ObservableList<Part> parts = FXCollections.observableArrayList();
     private int productID;
     private String name;
     private double price;
@@ -67,12 +67,6 @@ public class Product {
     // Get Parts associated with this product
     public ObservableList<Part> getParts() {
         return parts;
-    }
-    
-    // Copies parts list to allow new updated Product
-    public ObservableList<Part> setParts(ObservableList<Part> oldParts) {
-        this.parts = oldParts;
-        return this.parts;
     }
     
     // Remove parts association with this product

@@ -1,12 +1,16 @@
 
 package inventorymanagement;
 
+import java.util.Optional;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -35,15 +39,15 @@ public class AddPartScreen {
     private final Label invLabel = new Label("Inv");
     private final Label priceLabel = new Label("Price/Cost");
     private final Label maxLabel = new Label("Max");
+    private final Label minLabel = new Label("Min");
     
     private final TextField idBox = new TextField("Auto Gen - Disabled");
-    private final TextField nameBox = new TextField("Part Name");
-    private final TextField invBox = new TextField("Inv");
-    private final TextField priceBox = new TextField("Price/Cost");
-    private final TextField maxBox = new TextField("Max");
-    private final TextField minBox = new TextField("Min");
-    private final Label minLabel = new Label("Min");
-    private final TextField compMachBox = new TextField("Machine ID");
+    private final TextField nameBox = new TextField();
+    private final TextField invBox = new TextField();
+    private final TextField priceBox = new TextField();
+    private final TextField maxBox = new TextField();
+    private final TextField minBox = new TextField();
+    private final TextField compMachBox = new TextField();
     
     private final RadioButton inHouse = new RadioButton();
     private final RadioButton outsourced = new RadioButton();
@@ -90,7 +94,17 @@ public class AddPartScreen {
         
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction((ActionEvent e) -> {
-            stage.close();
+            Alert confirmCancel = new Alert(AlertType.CONFIRMATION);
+            confirmCancel.setTitle("Confirm Cancel");
+            confirmCancel.setHeaderText("");
+            confirmCancel.setContentText("Are you sure you want to exit without saving?");
+
+            Optional<ButtonType> option = confirmCancel.showAndWait();
+            if (option.get() == ButtonType.OK){
+               stage.close();
+            } else {
+               bp.requestFocus();
+            }
         });
         
         btns.getChildren().addAll(saveBtn, cancelBtn);
@@ -103,6 +117,7 @@ public class AddPartScreen {
         Scene scene = new Scene(bp, 400, 400);
         stage.setScene(scene);
         stage.show();
+        bp.requestFocus();
     }
     
         // Top Items on Add Part Screen
@@ -161,26 +176,33 @@ public class AddPartScreen {
             idBox.setDisable(true);
             idBox.setMaxWidth(125);
             
+            nameBox.setPromptText("Part Name");
             nameBox.setFont(ITALICS);
             nameBox.setMaxWidth(100);
             
+            invBox.setPromptText("Inv");
             invBox.setFont(ITALICS);
             invBox.setMaxWidth(100);
-            
+                        
+            priceBox.setPromptText("Price/Cost");
             priceBox.setFont(ITALICS);
             priceBox.setMaxWidth(100);
 
             HBox maxMin = new HBox();
-            
+                        
+            maxBox.setPromptText("Max");
             maxBox.setFont(ITALICS);
             maxBox.setMaxWidth(50);
             
             minLabel.setPadding(new Insets(0, 15, 0, 15));
-            
+                        
+            minBox.setPromptText("Min");
             minBox.setFont(ITALICS);
             minBox.setMaxWidth(50);
+            
             maxMin.getChildren().addAll(maxBox, minLabel, minBox);
             
+            compMachBox.setPromptText("Mach ID");
             compMachBox.setFont(ITALICS);
             compMachBox.setMaxWidth(100);
 
@@ -192,7 +214,7 @@ public class AddPartScreen {
         
         public void changeLabel(String label, String field) {
             compMachLabel.setText(label);
-            compMachBox.setText(field);
+            compMachBox.setPromptText(field);
         }
 }
     

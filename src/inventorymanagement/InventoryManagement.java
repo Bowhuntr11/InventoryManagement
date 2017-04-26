@@ -1,6 +1,7 @@
 
 package inventorymanagement;
 
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -54,6 +57,7 @@ public class InventoryManagement extends Application {
         Scene scene = new Scene(bp, 1200, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+        bp.requestFocus();
     }
     
     /*
@@ -88,13 +92,14 @@ public class InventoryManagement extends Application {
         Button searchParts = new Button("Search");
         
         // Parts Search Field
-        TextField searchField = new TextField("Part ID");
+        TextField searchField = new TextField();
+        searchField.setPromptText("Part ID");
         searchField.setMaxWidth(200);
         
         // Parts Search Button Action - Finds the part in Inventory by Part IDthen adds it to 
         // a new ObservableList to populate the tableview
         searchParts.setOnAction((ActionEvent e) -> {
-            Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText()));
+            Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText())); // Using polymorphism
             ObservableList<Part> searchPart = FXCollections.observableArrayList();
             searchPart.add(part);
             leftTable.setItems(searchPart);
@@ -159,8 +164,18 @@ public class InventoryManagement extends Application {
         // Delete Parts Button for Parts
         Button deleteBtnParts = new Button("Delete");
         deleteBtnParts.setOnAction((ActionEvent e) -> {
-            Part part = leftTable.getSelectionModel().getSelectedItem(); // Using polymorphism
-            Inventory.removePart(part.getPartID());
+            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmCancel.setTitle("Confirm Deletion");
+            confirmCancel.setHeaderText("");
+            confirmCancel.setContentText("Are you sure you want to delete this Part?");
+
+            Optional<ButtonType> option = confirmCancel.showAndWait();
+            if (option.get() == ButtonType.OK){
+                Part part = leftTable.getSelectionModel().getSelectedItem(); // Using polymorphism
+                Inventory.removePart(part.getPartID());
+            } else {
+                leftBottom.requestFocus();
+            }
         });
 
         leftBottom.getChildren().addAll(addBtnParts, modifyBtnParts, deleteBtnParts);
@@ -201,7 +216,8 @@ public class InventoryManagement extends Application {
         Button searchProducts = new Button("Search");
         
         // Product Search Field
-        TextField searchField = new TextField("Product ID");
+        TextField searchField = new TextField();
+        searchField.setPromptText("Product ID");
         searchField.setMaxWidth(200);
         
        // Product Search Button Action - Finds the product in Inventory by Product IDthen adds it to 
@@ -243,7 +259,7 @@ public class InventoryManagement extends Application {
                 new PropertyValueFactory<>("price"));
         
         
-        rightTable.setItems(Inventory.getPRODUCTS()); // Populating Table with Products ArrayList
+        rightTable.setItems(Inventory.getPRODUCTS()); // Populating Table with PRODUCTS ArrayList
         rightTable.getColumns().addAll(productID, productName, invLevelProducts, priceProduct);
         final VBox productsBox = new VBox();
         productsBox.setMaxHeight(200);
@@ -274,8 +290,18 @@ public class InventoryManagement extends Application {
         // Delete Parts Button for Products
         Button deleteBtnProduct = new Button("Delete");
         deleteBtnProduct.setOnAction((ActionEvent e) -> {
-            Product product = rightTable.getSelectionModel().getSelectedItem();
-            Inventory.removeProduct(product.getProductID());
+            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmCancel.setTitle("Confirm Deletion");
+            confirmCancel.setHeaderText("");
+            confirmCancel.setContentText("Are you sure you want to delete this Product?");
+
+            Optional<ButtonType> option = confirmCancel.showAndWait();
+            if (option.get() == ButtonType.OK){
+                Product product = rightTable.getSelectionModel().getSelectedItem();
+                Inventory.removeProduct(product.getProductID());
+            } else {
+                rightBottom.requestFocus();
+            }
         });
 
         rightBottom.getChildren().addAll(addBtnProduct, modifyBtnProduct, deleteBtnProduct);

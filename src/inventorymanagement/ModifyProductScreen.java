@@ -1,13 +1,16 @@
 
 package inventorymanagement;
 
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,7 +37,7 @@ public class ModifyProductScreen {
     final private Label invLabel = new Label("Inv");
     final private Label priceLabel = new Label("Price");
     final private Label maxLabel = new Label("Max");
-    final private Label minLabel = new Label("");
+    final private Label minLabel = new Label("Min");
     
     final private TextField idBox = new TextField("");
     final private TextField nameBox = new TextField("");
@@ -66,7 +69,7 @@ public class ModifyProductScreen {
             newProduct.setProductID(product.getProductID());
             newProduct.setName(nameBox.getText());
             newProduct.setInstock(Integer.parseInt(invBox.getText()));
-            newProduct.setPrice(Integer.parseInt(priceBox.getText()));
+            newProduct.setPrice(Double.parseDouble(priceBox.getText()));
             newProduct.setMax(Integer.parseInt(maxBox.getText()));
             newProduct.setMin(Integer.parseInt(minBox.getText()));
             Inventory.updateProduct(product.getProductID(), newProduct);
@@ -76,7 +79,17 @@ public class ModifyProductScreen {
         // Cancel Button
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction((ActionEvent e) -> {
-            stage.close();
+            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmCancel.setTitle("Confirm Cancel");
+            confirmCancel.setHeaderText("");
+            confirmCancel.setContentText("Are you sure you want to exit without saving?");
+
+            Optional<ButtonType> option = confirmCancel.showAndWait();
+            if (option.get() == ButtonType.OK){
+               stage.close();
+            } else {
+               mainPane.requestFocus();
+            }
         });
         
         btns.getChildren().addAll(saveBtn, cancelBtn);
@@ -98,6 +111,7 @@ public class ModifyProductScreen {
         Scene scene = new Scene(mainPane, 1000, 600);
         stage.setScene(scene);
         stage.show();
+        mainPane.requestFocus();
     }
     
         // Top Items on Modify Product Screen
@@ -168,6 +182,7 @@ public class ModifyProductScreen {
             return right;
         }
         
+        // Buttons for Modify Product Screen
         public VBox rightLayout(Product product) {
             VBox rightLayout = new VBox();
             
@@ -198,7 +213,7 @@ public class ModifyProductScreen {
             delBtnHBox.setPadding(new Insets(15, 5, 5, 335));
             Button delBtn = new Button("Delete");
             delBtn.setOnAction((ActionEvent e) -> {
-                Part part = rightBottomTable.getSelectionModel().getSelectedItem();
+                Part part = rightBottomTable.getSelectionModel().getSelectedItem(); // Using polymorphism
                 newProduct.removePart(part.getPartID());
             });
             delBtn.setMinWidth(75);
@@ -206,14 +221,15 @@ public class ModifyProductScreen {
             
             // Parts Search Field
             TextField searchField = new TextField();
+            searchField.setPromptText("Part ID");
             searchField.setMaxWidth(200);
             
             
             
-            // Parts Search Button Action - Finds the part in Inventory by Part IDthen adds it to 
+            // Parts Search Button Action - Finds the part in Inventory by PartID then adds it to 
             // a new ObservableList to populate the tableview
             searchPartsTop.setOnAction((ActionEvent e) -> {
-                Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText()));
+                Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText())); // Using polymorphism
                 ObservableList<Part> searchPart = FXCollections.observableArrayList();
                 searchPart.add(part);
                 rightTopTable.setItems(searchPart);
@@ -283,7 +299,6 @@ public class ModifyProductScreen {
                     new PropertyValueFactory<>("price"));
             pricePart.setMinWidth(130);
             
-            // Copying associated parts list to the newProduct
             newProduct = product;
             rightBottomTable.setItems(newProduct.getParts());
             rightBottomTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);

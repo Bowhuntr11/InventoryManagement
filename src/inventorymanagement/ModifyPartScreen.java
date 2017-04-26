@@ -1,12 +1,15 @@
 
 package inventorymanagement;
 
+import java.util.Optional;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -114,7 +117,17 @@ public class ModifyPartScreen {
         
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction((ActionEvent e) -> {
-            stage.close();
+            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmCancel.setTitle("Confirm Cancel");
+            confirmCancel.setHeaderText("");
+            confirmCancel.setContentText("Are you sure you want to exit without saving?");
+
+            Optional<ButtonType> option = confirmCancel.showAndWait();
+            if (option.get() == ButtonType.OK){
+               stage.close();
+            } else {
+               bp.requestFocus();
+            }
         });
         
         btns.getChildren().addAll(saveBtn, cancelBtn);
@@ -127,6 +140,7 @@ public class ModifyPartScreen {
         Scene scene = new Scene(bp, 400, 400);
         stage.setScene(scene);
         stage.show();
+        bp.requestFocus();
     }
     
         // Top Items on Modify Part Screen

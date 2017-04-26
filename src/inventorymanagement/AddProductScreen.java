@@ -1,13 +1,17 @@
 
 package inventorymanagement;
 
+import java.util.Optional;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,14 +38,14 @@ public class AddProductScreen {
     private final Label invLabel = new Label("Inv");
     private final Label priceLabel = new Label("Price");
     private final Label maxLabel = new Label("Max");
+    private final Label minLabel = new Label("Min");
     
     private final TextField idBox = new TextField("Auto Gen - Disabled");
-    private final TextField nameBox = new TextField("Product Name");
-    private final TextField invBox = new TextField("Inv");
-    private final TextField priceBox = new TextField("Price");
-    private final TextField maxBox = new TextField("Max");
-    private final TextField minBox = new TextField("Min");
-    private final Label minLabel = new Label("Min");
+    private final TextField nameBox = new TextField();
+    private final TextField invBox = new TextField();
+    private final TextField priceBox = new TextField();
+    private final TextField maxBox = new TextField();
+    private final TextField minBox = new TextField();
     
     private Product newProduct = new Product();
     private final TableView<Part> rightTopTable = new TableView();
@@ -67,7 +71,7 @@ public class AddProductScreen {
             newProduct.setProductID();
             newProduct.setName(nameBox.getText());
             newProduct.setInstock(Integer.parseInt(invBox.getText()));
-            newProduct.setPrice(Integer.parseInt(priceBox.getText()));
+            newProduct.setPrice(Double.parseDouble(priceBox.getText()));
             newProduct.setMax(Integer.parseInt(maxBox.getText()));
             newProduct.setMin(Integer.parseInt(minBox.getText()));
             Inventory.addProduct(newProduct);
@@ -76,8 +80,18 @@ public class AddProductScreen {
         
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setOnAction((ActionEvent e) -> {
-            newProduct = null;
-            stage.close();
+            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmCancel.setTitle("Confirm Cancel");
+            confirmCancel.setHeaderText("");
+            confirmCancel.setContentText("Are you sure you want to exit without saving?");
+
+            Optional<ButtonType> option = confirmCancel.showAndWait();
+            if (option.get() == ButtonType.OK){
+               newProduct = null;
+               stage.close();
+            } else {
+               mainPane.requestFocus();
+            }
         });
         
         btns.getChildren().addAll(saveBtn, cancelBtn);
@@ -95,10 +109,10 @@ public class AddProductScreen {
         // Organizing right side of layout
         rightPane.setCenter(rightLayout());
         
-        
         Scene scene = new Scene(mainPane, 1000, 600);
         stage.setScene(scene);
         stage.show();
+        mainPane.requestFocus();
     }
     
         // Top Items on Add Product Screen
@@ -136,24 +150,30 @@ public class AddProductScreen {
             idBox.setDisable(true);
             idBox.setMaxWidth(125);
             
+            nameBox.setPromptText("Product Name");
             nameBox.setFont(ITALICS);
             nameBox.setMaxWidth(100);
             
+            invBox.setPromptText("Inv");
             invBox.setFont(ITALICS);
             invBox.setMaxWidth(100);
             
+            priceBox.setPromptText("Price");
             priceBox.setFont(ITALICS);
             priceBox.setMaxWidth(100);
 
             HBox maxMin = new HBox();
             
+            maxBox.setPromptText("Max");
             maxBox.setFont(ITALICS);
             maxBox.setMaxWidth(50);
             
             minLabel.setPadding(new Insets(0, 15, 0, 15));
             
+            minBox.setPromptText("Min");
             minBox.setFont(ITALICS);
             minBox.setMaxWidth(50);
+            
             maxMin.getChildren().addAll(maxBox, minLabel, minBox);
 
             right.getChildren().addAll(idBox, nameBox, invBox, priceBox, 
@@ -199,14 +219,15 @@ public class AddProductScreen {
             delBtnHBox.getChildren().addAll(delBtn);
             
             // Parts Search Field
-            TextField searchField = new TextField("Part ID");
+            TextField searchField = new TextField();
+            searchField.setPromptText("Part ID");
             searchField.setMaxWidth(200);
             searchHBox.getChildren().addAll(searchPartsTop, searchField);
             
             // Parts Search Button Action - Finds the part in Inventory by Part IDthen adds it to 
             // a new ObservableList to populate the tableview
             searchPartsTop.setOnAction((ActionEvent e) -> {
-                Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText()));
+                Part part = Inventory.lookupPart(Integer.parseInt(searchField.getText())); // Using polymorphism
                 ObservableList<Part> searchPart = FXCollections.observableArrayList();
                 searchPart.add(part);
                 rightTopTable.setItems(searchPart);
@@ -241,6 +262,7 @@ public class AddProductScreen {
             
             rightTopTable.setItems(Inventory.getALLPARTS());
             rightTopTable.getColumns().addAll(partID, partName, invLevelParts, pricePart);
+            rightTopTable.requestFocus();
             
             final VBox topTable = new VBox();
             topTable.setMaxHeight(150);

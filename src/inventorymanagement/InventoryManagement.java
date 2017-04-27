@@ -51,7 +51,17 @@ public class InventoryManagement extends Application {
         BorderPane.setAlignment(exitBtn, Pos.CENTER_RIGHT);
         bp.setBottom(exitBtn);
         exitBtn.setOnAction((ActionEvent e) -> {
-            primaryStage.close();
+            Alert confirmExit = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmExit.setTitle("Confirm Exit");
+            confirmExit.setHeaderText("");
+            confirmExit.setContentText("Are you sure you want to exit?");
+
+            Optional<ButtonType> option = confirmExit.showAndWait();
+            if (option.get() == ButtonType.OK){
+               primaryStage.close();
+            } else {
+               bp.requestFocus();
+            }
         });
 
         Scene scene = new Scene(bp, 1200, 600);
@@ -164,12 +174,12 @@ public class InventoryManagement extends Application {
         // Delete Parts Button for Parts
         Button deleteBtnParts = new Button("Delete");
         deleteBtnParts.setOnAction((ActionEvent e) -> {
-            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmCancel.setTitle("Confirm Deletion");
-            confirmCancel.setHeaderText("");
-            confirmCancel.setContentText("Are you sure you want to delete this Part?");
+            Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDelete.setTitle("Confirm Deletion");
+            confirmDelete.setHeaderText("");
+            confirmDelete.setContentText("Are you sure you want to delete this Part?");
 
-            Optional<ButtonType> option = confirmCancel.showAndWait();
+            Optional<ButtonType> option = confirmDelete.showAndWait();
             if (option.get() == ButtonType.OK){
                 Part part = leftTable.getSelectionModel().getSelectedItem(); // Using polymorphism
                 Inventory.removePart(part.getPartID());
@@ -290,15 +300,23 @@ public class InventoryManagement extends Application {
         // Delete Parts Button for Products
         Button deleteBtnProduct = new Button("Delete");
         deleteBtnProduct.setOnAction((ActionEvent e) -> {
-            Alert confirmCancel = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmCancel.setTitle("Confirm Deletion");
-            confirmCancel.setHeaderText("");
-            confirmCancel.setContentText("Are you sure you want to delete this Product?");
+            Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDelete.setTitle("Confirm Deletion");
+            confirmDelete.setHeaderText("");
+            confirmDelete.setContentText("Are you sure you want to delete this Product?");
 
-            Optional<ButtonType> option = confirmCancel.showAndWait();
+            Optional<ButtonType> option = confirmDelete.showAndWait();
             if (option.get() == ButtonType.OK){
                 Product product = rightTable.getSelectionModel().getSelectedItem();
-                Inventory.removeProduct(product.getProductID());
+                if (product.getParts().isEmpty()) {
+                    Inventory.removeProduct(product.getProductID());
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("");
+                    alert.setHeaderText("Error!");
+                    alert.setContentText("Can't delete this product! It has a part assigned to it!");
+                    alert.showAndWait();
+                }
             } else {
                 rightBottom.requestFocus();
             }

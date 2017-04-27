@@ -66,29 +66,44 @@ public class AddPartScreen {
         // Save Part
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
-            if (inHouse.isSelected() == true) {
-                InHousePart newPart = new InHousePart();
-                newPart.setPartID();
-                newPart.setName(nameBox.getText());
-                newPart.setInstock(Integer.parseInt(invBox.getText()));
-                newPart.setPrice(Double.parseDouble(invBox.getText()));
-                newPart.setMax(Integer.parseInt(invBox.getText()));
-                newPart.setMin(Integer.parseInt(invBox.getText()));
-                newPart.setMachineID(Integer.parseInt(compMachBox.getText()));
-                Inventory.addPart(newPart);
-                stage.close();
-            }
-            else {
-                OutsourcedPart newPart = new OutsourcedPart();
-                newPart.setPartID();
-                newPart.setName(nameBox.getText());
-                newPart.setInstock(Integer.parseInt(invBox.getText()));
-                newPart.setPrice(Double.parseDouble(invBox.getText()));
-                newPart.setMax(Integer.parseInt(invBox.getText()));
-                newPart.setMin(Integer.parseInt(invBox.getText()));
-                newPart.setCompanyName(compMachBox.getText());
-                Inventory.addPart(newPart);
-                stage.close();
+            if((Integer.parseInt(minBox.getText())) <= (Integer.parseInt(maxBox.getText()))
+               && (Integer.parseInt(maxBox.getText())) >= (Integer.parseInt(minBox.getText()))
+                    && (Integer.parseInt(invBox.getText())) <= (Integer.parseInt(maxBox.getText()))
+                        && (Integer.parseInt(invBox.getText())) >= (Integer.parseInt(minBox.getText()))
+                                && !nameBox.getText().isEmpty() 
+                                    && !priceBox.getText().isEmpty()
+                                        && !invBox.getText().isEmpty())
+            {
+                if (inHouse.isSelected() == true) {
+                    InHousePart newPart = new InHousePart();
+                    newPart.setPartID();
+                    newPart.setName(nameBox.getText());
+                    newPart.setInstock(Integer.parseInt(invBox.getText()));
+                    newPart.setPrice(Double.parseDouble(invBox.getText()));
+                    newPart.setMax(Integer.parseInt(invBox.getText()));
+                    newPart.setMin(Integer.parseInt(invBox.getText()));
+                    newPart.setMachineID(Integer.parseInt(compMachBox.getText()));
+                    Inventory.addPart(newPart);
+                    stage.close();
+                }
+                else {
+                    OutsourcedPart newPart = new OutsourcedPart();
+                    newPart.setPartID();
+                    newPart.setName(nameBox.getText());
+                    newPart.setInstock(Integer.parseInt(invBox.getText()));
+                    newPart.setPrice(Double.parseDouble(invBox.getText()));
+                    newPart.setMax(Integer.parseInt(invBox.getText()));
+                    newPart.setMin(Integer.parseInt(invBox.getText()));
+                    newPart.setCompanyName(compMachBox.getText());
+                    Inventory.addPart(newPart);
+                    stage.close();
+                }
+            } else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("");
+                alert.setHeaderText("Error!");
+                alert.setContentText("Uh oh, there was a problem creating your part! Check your values to make sure they are correct!");
+                alert.showAndWait();
             }
         });
         

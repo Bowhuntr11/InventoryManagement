@@ -2,7 +2,6 @@
 package inventorymanagement;
 
 import java.util.Optional;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -68,14 +68,41 @@ public class AddProductScreen {
         // Save Product
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
-            newProduct.setProductID();
-            newProduct.setName(nameBox.getText());
-            newProduct.setInstock(Integer.parseInt(invBox.getText()));
-            newProduct.setPrice(Double.parseDouble(priceBox.getText()));
-            newProduct.setMax(Integer.parseInt(maxBox.getText()));
-            newProduct.setMin(Integer.parseInt(minBox.getText()));
-            Inventory.addProduct(newProduct);
-            stage.close();
+            
+            // For loop to check to make sure that the price of a product
+            // cannot be less than the cost of the parts
+            double total = 0;
+            for (Part parts : newProduct.getParts()) {
+                total = total + parts.getPrice();
+            }
+            
+            if((Integer.parseInt(minBox.getText())) <= (Integer.parseInt(maxBox.getText()))
+               && (Integer.parseInt(maxBox.getText())) >= (Integer.parseInt(minBox.getText()))
+                    && (Integer.parseInt(invBox.getText())) <= (Integer.parseInt(maxBox.getText()))
+                        && (Integer.parseInt(invBox.getText())) >= (Integer.parseInt(minBox.getText()))
+                            && !newProduct.getParts().isEmpty()
+                                && !nameBox.getText().isEmpty() 
+                                    && !priceBox.getText().isEmpty()
+                                        && !invBox.getText().isEmpty()
+                                            && total <= (Double.parseDouble(priceBox.getText())))
+            {
+                newProduct.setProductID();
+                newProduct.setName(nameBox.getText());
+                newProduct.setInstock(Integer.parseInt(invBox.getText()));
+                newProduct.setPrice(Double.parseDouble(priceBox.getText()));
+                newProduct.setMax(Integer.parseInt(maxBox.getText()));
+                newProduct.setMin(Integer.parseInt(minBox.getText()));
+                Inventory.addProduct(newProduct);
+                stage.close();
+            } else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("");
+                alert.setHeaderText("Error!");
+                alert.setContentText("Uh oh, there was a problem creating your product! Check your values to make sure they are correct!"
+                        + " Make sure you have a part assigned to this product!" + " Also, the total price of the parts cannot be more"
+                        + " than the price of the product!");
+                alert.showAndWait();
+            }
         });
         
         Button cancelBtn = new Button("Cancel");

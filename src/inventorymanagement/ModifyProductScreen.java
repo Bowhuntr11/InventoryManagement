@@ -66,6 +66,22 @@ public class ModifyProductScreen {
         // Save Button
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction((ActionEvent e) -> {
+            
+            double total = 0;
+            for (Part parts : newProduct.getParts()) {
+                total = total + parts.getPrice();
+            }
+            
+            if((Integer.parseInt(minBox.getText())) <= (Integer.parseInt(maxBox.getText()))
+               && (Integer.parseInt(maxBox.getText())) >= (Integer.parseInt(minBox.getText()))
+                    && (Integer.parseInt(invBox.getText())) <= (Integer.parseInt(maxBox.getText()))
+                        && (Integer.parseInt(invBox.getText())) >= (Integer.parseInt(minBox.getText()))
+                            && !newProduct.getParts().isEmpty()
+                                && !nameBox.getText().isEmpty() 
+                                    && !priceBox.getText().isEmpty()
+                                        && !invBox.getText().isEmpty()
+                                            && total <= (Double.parseDouble(priceBox.getText())))
+            {
             newProduct.setProductID(product.getProductID());
             newProduct.setName(nameBox.getText());
             newProduct.setInstock(Integer.parseInt(invBox.getText()));
@@ -74,6 +90,14 @@ public class ModifyProductScreen {
             newProduct.setMin(Integer.parseInt(minBox.getText()));
             Inventory.updateProduct(product.getProductID(), newProduct);
             stage.close();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("");
+                alert.setHeaderText("Error!");
+                alert.setContentText("Uh oh, there was a problem creating your product! Check your values to make sure they are correct!"
+                        + " And that you have a part assigned to this product!");
+                alert.showAndWait();
+            }
         });
         
         // Cancel Button
@@ -213,8 +237,18 @@ public class ModifyProductScreen {
             delBtnHBox.setPadding(new Insets(15, 5, 5, 335));
             Button delBtn = new Button("Delete");
             delBtn.setOnAction((ActionEvent e) -> {
-                Part part = rightBottomTable.getSelectionModel().getSelectedItem(); // Using polymorphism
-                newProduct.removePart(part.getPartID());
+                Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmDelete.setTitle("Confirm Removal");
+                confirmDelete.setHeaderText("");
+                confirmDelete.setContentText("Are you sure you want to remove this part from this product?");
+
+                Optional<ButtonType> option = confirmDelete.showAndWait();
+                if (option.get() == ButtonType.OK){
+                    Part part = rightBottomTable.getSelectionModel().getSelectedItem(); // Using polymorphism
+                    newProduct.removePart(part.getPartID());
+                } else {
+                    rightBottomTable.requestFocus();
+                }
             });
             delBtn.setMinWidth(75);
             delBtnHBox.getChildren().addAll(delBtn);
